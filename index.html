@@ -36,6 +36,8 @@
   --sea-soft:#d3ecee;
   --violet:#5f4796;
   --violet-soft:#e8e2f4;
+  --rose:#a03a68;
+  --rose-soft:#f7e1eb;
   --warn:#c27c0e;
   --hero:#0f2430;
   --sk-skin:#1e3a4a;
@@ -53,7 +55,7 @@
     --bg:#09141a; --surface:#0f212a; --surface-2:#152f3c; --surface-3:#24465a;
     --ink:#e6eff3; --ink-2:#9bb1bd; --line:#1f3846;
     --accent:#ff6a35; --accent-ink:#1b0b04; --accent-soft:#45200f; --accent-text:#ff9a72;
-    --sea:#38c4c6; --sea-soft:#0f383c; --violet:#bba5ee; --violet-soft:#2c2444; --warn:#e3a640;
+    --sea:#38c4c6; --sea-soft:#0f383c; --violet:#bba5ee; --violet-soft:#2c2444; --rose:#f29bc1; --rose-soft:#3d1c2c; --warn:#e3a640;
     --hero:#061017;
     --sk-skin:#dce8ee; --sk-top:#3cc8c9; --sk-bottom:#8fb0c6; --sk-shoe:#ff7a45; --fig-far:#4f6d7d;
     --shadow:0 1px 2px rgba(0,0,0,.35),0 10px 28px rgba(0,0,0,.32);
@@ -64,7 +66,7 @@
   --bg:#09141a; --surface:#0f212a; --surface-2:#152f3c; --surface-3:#24465a;
   --ink:#e6eff3; --ink-2:#9bb1bd; --line:#1f3846;
   --accent:#ff6a35; --accent-ink:#1b0b04; --accent-soft:#45200f; --accent-text:#ff9a72;
-  --sea:#38c4c6; --sea-soft:#0f383c; --violet:#bba5ee; --violet-soft:#2c2444; --warn:#e3a640;
+  --sea:#38c4c6; --sea-soft:#0f383c; --violet:#bba5ee; --violet-soft:#2c2444; --rose:#f29bc1; --rose-soft:#3d1c2c; --warn:#e3a640;
   --hero:#061017;
   --sk-skin:#dce8ee; --sk-top:#3cc8c9; --sk-bottom:#8fb0c6; --sk-shoe:#ff7a45; --fig-far:#4f6d7d;
   --shadow:0 1px 2px rgba(0,0,0,.35),0 10px 28px rgba(0,0,0,.32);
@@ -191,6 +193,7 @@ details.more[open] summary::before{transform:rotate(45deg)}
 .kind.statico{background:var(--sea-soft);color:var(--sea)}
 .kind.dinamico{background:var(--accent-soft);color:var(--accent-text)}
 .kind.attivazione{background:var(--violet-soft);color:var(--violet)}
+.kind.rullo{background:var(--rose-soft);color:var(--rose)}
 .note{font-size:13px;color:var(--ink-2);padding:4px 16px 16px}
 .note + .note{padding-top:0;margin-top:-8px}
 .guard{display:inline-flex;align-items:center;gap:6px;margin-top:10px;padding:5px 11px 5px 9px;border-radius:999px;background:var(--violet-soft);color:var(--violet);font-size:13px;font-weight:700;text-align:left}
@@ -428,7 +431,13 @@ details.more[open] summary::before{transform:rotate(45deg)}
           </div>
         </div>
         <details class="more" id="more">
-          <summary>Personalizza: lato più rigido, suoni, precauzioni</summary>
+          <summary>Personalizza: foam roller, lato più rigido, suoni, precauzioni</summary>
+          <div class="ctrl">
+            <span class="cap">Attrezzatura</span>
+            <div class="toggles" style="margin-top:2px">
+              <label class="switch" for="optRoller"><input type="checkbox" id="optRoller"><span>Foam roller<small>2–3 minuti di rullo all'inizio delle sessioni, in più rispetto ai minuti scelti.</small></span></label>
+            </div>
+          </div>
           <div class="ctrl">
             <span class="cap">Precauzioni (facoltative)</span>
             <div class="toggles" style="margin-top:2px">
@@ -483,6 +492,7 @@ details.more[open] summary::before{transform:rotate(45deg)}
             <div><span class="kind statico">Statico</span><span>Raggiungi la posizione e tienila respirando lento.</span></div>
             <div><span class="kind dinamico">Dinamico</span><span>Movimento lento e continuo per tutto il tempo.</span></div>
             <div><span class="kind attivazione">Attivazione</span><span>Contrazioni controllate per rinforzare la postura.</span></div>
+            <div><span class="kind rullo">Rullo</span><span>Scorri lento sul foam roller; sui punti più duri fermati 10–20 secondi.</span></div>
           </div>
         </article>
         <article class="gcard">
@@ -498,6 +508,16 @@ details.more[open] summary::before{transform:rotate(45deg)}
           <h3>Prima o dopo lo sport?</h3>
           <p><b>Prima</b> di uscire in tavola o di allenarti con i pesi fai mobilità dinamica: la sessione <i>Prima dello sport</i>, 5–10 minuti.</p>
           <p>Tenute statiche brevi, sotto i 60 secondi per muscolo e seguite da movimento, non tolgono forza ed esplosività in modo rilevante. Le tenute lunghe sì: tienile per <b>dopo</b>, per la sera o per i giorni di scheda.</p>
+        </article>
+        <article class="gcard">
+          <h3>Foam roller</h3>
+          <p>Con il rullo attivo le sessioni partono con 2–3 minuti sui muscoli che allungherai subito dopo: gli allungamenti diventano più comodi e un po' più profondi. Dopo lo sport riduce l'indolenzimento e non toglie forza, quindi va bene anche prima di allenarti.</p>
+          <ul>
+            <li><b>Pressione 5–7 su 10.</b> Scorri lento, circa 2–3 cm al secondo, e respira. Sui punti più duri fermati 10–20 secondi.</li>
+            <li><b>Mai</b> su articolazioni, ossa, zona lombare o collo, né su lividi, strappi recenti o zone gonfie.</li>
+            <li>Lascia stare l'interno coscia vicino all'inguine e l'esterno coscia (la bandelletta): fa male e serve poco. Meglio glutei e quadricipiti.</li>
+            <li>In palestra, prima della mobilità dinamica, 1–2 minuti su polpacci e quadricipiti vanno bene. In viaggio senza rullo spegnilo in <i>Personalizza</i>.</li>
+          </ul>
         </article>
         <article class="gcard">
           <h3>Lato più rigido</h3>
@@ -567,7 +587,7 @@ var DAYS = ["Lunedì","Martedì","Mercoledì","Giovedì","Venerdì","Sabato","Do
 var DAYS_SHORT = ["Lun","Mar","Mer","Gio","Ven","Sab","Dom"];
 var SIDE_M = {dx:"destro", sx:"sinistro"};
 var SIDE_F = {dx:"destra", sx:"sinistra"};
-var KIND_LABEL = {statico:"Statico", dinamico:"Dinamico", attivazione:"Attivazione"};
+var KIND_LABEL = {statico:"Statico", dinamico:"Dinamico", attivazione:"Attivazione", rullo:"Rullo"};
 var CHECK = '<svg viewBox="0 0 16 16" aria-hidden="true"><path d="M3.5 8.5l3 3 6-7" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>';
 var PLAY = '<svg viewBox="0 0 20 20" aria-hidden="true"><path d="M6 3.8v12.4L16.2 10z" fill="currentColor"/></svg>';
 var PAUSE = '<svg viewBox="0 0 20 20" aria-hidden="true"><rect x="4.5" y="3.5" width="4" height="13" rx="1.2" fill="currentColor"/><rect x="11.5" y="3.5" width="4" height="13" rx="1.2" fill="currentColor"/></svg>';
@@ -583,7 +603,7 @@ var SPORTS = {
 };
 var SPORT_ORDER = ["gym","snow","wake","surf","skate","post"];
 
-var AREA_COLOR = {anche:"#e4572e", gambe:"#0e8a8f", colonna:"#2f6fc4", spalle:"#7656b3", collo:"#c48a06", pre:"#d9453d"};
+var AREA_COLOR = {anche:"#e4572e", gambe:"#0e8a8f", colonna:"#2f6fc4", spalle:"#7656b3", collo:"#c48a06", pre:"#d9453d", rullo:"#b5487a"};
 var AREAS = [
   {id:"all", name:"Tutte le zone"},
   {id:"anche", name:"Anche"},
@@ -591,7 +611,8 @@ var AREAS = [
   {id:"colonna", name:"Colonna e respiro"},
   {id:"spalle", name:"Spalle"},
   {id:"collo", name:"Collo e polsi"},
-  {id:"pre", name:"Pre-sport"}
+  {id:"pre", name:"Pre-sport"},
+  {id:"rullo", name:"Foam roller"}
 ];
 
 var ZONES = [
@@ -714,10 +735,10 @@ var EX_LIST = [
  cue:"Inspira apri, espira arrotonda. Lento.",
  mistakes:["Muovere solo il collo.","Andare troppo veloce."],
  easier:"Movimento più piccolo.", harder:"Aggiungi un'oscillazione laterale del bacino tra una ripetizione e l'altra."},
-{id:"libro", name:"Apertura a libro", kind:"dinamico", sides:2, area:"colonna", equip:"Tappetino, cuscino",
+{id:"libro", name:"Apertura a libro", kind:"dinamico", sides:2, area:"colonna", equip:"Tappetino, cuscino o foam roller",
  muscles:"Colonna toracica, pettorali", sports:["surf","snow","wake","skate","gym","post"], zones:["col"], sideText:"braccio {m} che apre",
  why:"La rotazione toracica è il motore delle curve in snowboard, dei cutback nel surf e delle rotazioni nei salti. Se manca, la ruoti dalla zona lombare o dalle ginocchia.",
- steps:["Sdraiati su un fianco, ginocchia piegate a 90° una sopra l'altra (cuscino tra le ginocchia).","Braccia distese davanti, palmi uniti.","Apri il braccio sopra verso il lato opposto seguendo la mano con lo sguardo, come la pagina di un libro.","Fermati 2-3 secondi a fine movimento espirando, poi torna."],
+ steps:["Sdraiati su un fianco, ginocchia piegate a 90° una sopra l'altra (cuscino tra le ginocchia, oppure il ginocchio sopra appoggiato sul foam roller: tiene fermo il bacino).","Braccia distese davanti, palmi uniti.","Apri il braccio sopra verso il lato opposto seguendo la mano con lo sguardo, come la pagina di un libro.","Fermati 2-3 secondi a fine movimento espirando, poi torna."],
  cue:"Ginocchia ferme, ruota il petto, segui la mano con gli occhi.",
  mistakes:["Staccare le ginocchia per ruotare di più.","Forzare la spalla a terra."],
  easier:"Movimento più piccolo.", harder:"Resta nella posizione aperta respirando per tutto il tempo."},
@@ -742,7 +763,7 @@ var EX_LIST = [
  cue:"Spalle a terra, ginocchia pesanti, espira lungo.",
  mistakes:["Staccare la spalla opposta.","Tenere le gambe in tensione: lasciale cadere."],
  easier:"Cuscino sotto le ginocchia.", harder:"Gamba sopra distesa, tenuta con la mano opposta."},
-{id:"foam", name:"Estensione toracica sul rullo", kind:"dinamico", sides:1, area:"colonna", equip:"Foam roller o asciugamano arrotolato",
+{id:"foam", roller:true, name:"Estensione toracica sul rullo", kind:"dinamico", sides:1, area:"colonna", equip:"Foam roller o asciugamano arrotolato",
  muscles:"Colonna toracica", sports:["surf","gym","wake","post"], zones:["col"],
  why:"Contrasta la postura curva e prepara pagaiata ed esercizi sopra la testa. Una toracica che si estende protegge spalle e zona lombare.",
  steps:["Seduto con il rullo dietro la schiena all'altezza delle scapole, mani dietro la testa.","Appoggiati e lascia andare testa e spalle all'indietro sopra il rullo, glutei a terra.","Fai 3-4 estensioni lente, poi sposta il rullo di qualche centimetro più in alto e ripeti.","Mai sotto la zona lombare: solo la parte alta della schiena."],
@@ -865,6 +886,55 @@ var EX_LIST = [
  mistakes:["Ruotare con le ginocchia bloccate.","Movimenti a scatti."],
  easier:"Ampiezza ridotta.", harder:"Aggiungi un passo laterale a ogni rotazione."},
 
+/* Foam roller: blocco iniziale delle sessioni, in più rispetto ai minuti scelti */
+{id:"rullo_polpacci", roller:true, name:"Polpacci sul rullo", kind:"rullo", sides:2, fixed:45, area:"rullo", equip:"Foam roller",
+ muscles:"Gastrocnemio, soleo", sports:["snow","skate","surf","gym"], zones:[],
+ half:"Ora ruota il piede in dentro e in fuori per prendere i lati del polpaccio.",
+ why:"Scarponi e scarpe da skate tengono il polpaccio sempre in tensione. Sciolto prima di ginocchio al muro e polpaccio al muro, lascia avanzare meglio la tibia: la dorsiflessione che ti serve sulla tavola e nello squat.",
+ steps:["Seduto, un polpaccio sul rullo e mani a terra dietro di te; l'altra gamba piegata con il piede a terra.","Solleva il bacino e scorri lento dalla caviglia fino a sotto il ginocchio, poi torna.","Sui punti più duri fermati 10–20 secondi respirando.","Per più pressione accavalla l'altra gamba sopra."],
+ cue:"Lento, respira, fermati sui punti duri.",
+ mistakes:["Scorrere veloce avanti e indietro.","Passare sopra il retro del ginocchio."],
+ easier:"Bacino appoggiato a terra: meno peso sul rullo.", harder:"Gambe accavallate per più pressione."},
+{id:"rullo_quad", roller:true, name:"Quadricipiti sul rullo", kind:"rullo", sides:1, fixed:60, area:"rullo", equip:"Foam roller",
+ muscles:"Quadricipiti, retto femorale", sports:["snow","skate","wake","surf","gym","post"], zones:[],
+ half:"Ora fermati sul punto più duro e piega e distendi il ginocchio 5 volte.",
+ why:"Il quadricipite lavora tantissimo nelle posizioni piegate di snowboard, wake e squat. Sciolto prima di flessori e couch stretch, l'allungamento diventa più comodo e va più in profondità.",
+ steps:["A pancia in giù sugli avambracci, rullo sotto le cosce, corpo dritto come in un plank.","Scorri lento da sopra il ginocchio fino a qualche centimetro sotto la piega dell'anca, poi torna.","Sposta il peso un po' a destra e a sinistra per prendere anche l'esterno e l'interno della coscia.","Addominali attivi: la schiena non deve cedere."],
+ cue:"Plank sugli avambracci, lento, schiena dritta.",
+ mistakes:["Lasciar cedere la zona lombare.","Salire sulla piega dell'anca o sulla rotula."],
+ easier:"Più peso sugli avambracci, meno sul rullo.", harder:"Una gamba alla volta, con l'altra appoggiata di lato."},
+{id:"rullo_ischio", roller:true, name:"Ischiocrurali sul rullo", kind:"rullo", sides:1, fixed:60, area:"rullo", equip:"Foam roller",
+ muscles:"Ischiocrurali", sports:["gym","wake","snow","skate","surf"], zones:[],
+ half:"Ora ruota le punte dei piedi in dentro e in fuori per prendere i lati della coscia.",
+ why:"Dopo stacchi, corse e giornate sulla tavola il retro della coscia è duro: sciolto prima dell'allungamento, si apre con meno resistenza e la schiena resta più libera quando ti pieghi in avanti.",
+ steps:["Seduto, rullo sotto le cosce e mani a terra dietro di te, gambe distese.","Solleva il bacino e scorri lento da sotto il gluteo fino a sopra il ginocchio, poi torna.","Sui punti più duri fermati 10–20 secondi respirando."],
+ cue:"Bacino sollevato, lento, spalle lontane dalle orecchie.",
+ mistakes:["Andare troppo veloce.","Passare sopra il retro del ginocchio."],
+ easier:"Ginocchia leggermente piegate.", harder:"Una gamba alla volta, con l'altra accavallata sopra."},
+{id:"rullo_glutei", roller:true, name:"Glutei sul rullo", kind:"rullo", sides:2, fixed:45, area:"rullo", equip:"Foam roller",
+ muscles:"Grande e medio gluteo, piriforme", sports:["snow","skate","surf","wake","gym"], zones:[], sideText:"caviglia {f} sul ginocchio",
+ half:"Ora fermati sul punto più duro e respira lento per 10–20 secondi.",
+ why:"Glutei e piriforme lavorano in ogni curva e in ogni atterraggio. Sciolti prima di piccione, 90/90 e figura 4, le anche si aprono con meno resistenza.",
+ steps:["Seduto sul rullo, mani a terra dietro di te, piedi a terra.","Accavalla una caviglia sul ginocchio opposto, come nella figura 4.","Inclinati verso il lato della gamba accavallata e scorri lento su tutto il gluteo.","Sui punti più duri fermati e respira."],
+ cue:"Caviglia sul ginocchio, inclinati sul lato che lavora.",
+ mistakes:["Rotolare sull'osso del bacino.","Trattenere il respiro sui punti duri."],
+ easier:"Senza accavallare: entrambi i piedi a terra.", harder:"Porta più peso sul lato che lavora."},
+{id:"rullo_dorsali", roller:true, name:"Dorsali sul rullo", kind:"rullo", sides:2, fixed:45, area:"rullo", equip:"Foam roller",
+ muscles:"Gran dorsale, grande rotondo", sports:["surf","wake","gym","snow"], zones:[], sideText:"fianco {m} sul rullo",
+ half:"Ora ruota leggermente il busto in avanti e indietro sopra il rullo.",
+ why:"Pagaiata, trazione del cavo e tirate in palestra accorciano i dorsali, che tirano le spalle in avanti e frenano le braccia sopra la testa. Sciolti, aiutano toracica e postura.",
+ steps:["Sdraiato su un fianco con il rullo sotto l'ascella, braccio di sotto disteso sopra la testa con il pollice in su.","Gamba sopra piegata con il piede a terra e mano libera a terra davanti al petto per regolare il peso.","Scorri lento dall'ascella fino a metà schiena, poi torna.","Se senti la spalla instabile o dolorante, esci e salta l'esercizio."],
+ cue:"Pollice in su, lento, regola il peso con mano e piede.",
+ mistakes:["Rotolare sulla spalla invece che sul fianco.","Scendere fino alla zona lombare."],
+ easier:"Più peso su mano e piede davanti.", harder:"Gamba sopra distesa per più pressione."},
+{id:"petto_rullo", roller:true, name:"Apertura del petto sul rullo", kind:"statico", sides:1, fixed:60, area:"spalle", equip:"Foam roller lungo (circa 90 cm)",
+ muscles:"Pettorali, colonna toracica", sports:["post","surf","gym","wake"], zones:["spa"],
+ why:"La gravità apre il petto e riporta indietro le spalle senza forzare: il modo più rilassato per contrastare la postura curva dopo ore seduto, in auto o a pagaiare.",
+ steps:["Sdraiato a pancia in su con il rullo lungo la colonna: testa e bacino appoggiati sopra, ginocchia piegate e piedi a terra.","Apri le braccia a terra a circa 45° dai fianchi, palmi in su.","Lascia scendere le spalle verso terra e respira lento con la pancia.","Se la spalla tira davanti o la senti instabile, avvicina le braccia ai fianchi."],
+ cue:"Braccia basse e pesanti, respira con la pancia.",
+ mistakes:["Aprire le braccia all'altezza delle spalle.","Inarcare la zona lombare: piedi a terra e costole basse."],
+ easier:"Braccia lungo i fianchi.", harder:"Resta 2 minuti respirando lento."},
+
 /* Rinforzo: sempre in libreria, entrano nelle sessioni con le precauzioni */
 {id:"rotesterna", rehab:true, name:"Rotazione esterna con elastico", kind:"attivazione", sides:2, area:"spalle", equip:"Elastico leggero, asciugamano",
  muscles:"Cuffia dei rotatori (infraspinato, piccolo rotondo)", sports:["surf","wake","gym","snow","post"], zones:[], sideText:"braccio {m}",
@@ -917,14 +987,14 @@ var EX_LIST = [
  cue:"Fronte a terra, spalle morbide, respira nella schiena.",
  mistakes:["Forzare il bacino sui talloni.","Trattenere il respiro."],
  easier:"Cuscino tra glutei e talloni o sotto la fronte.", harder:"Resta più a lungo respirando lento."},
-{id:"libro_soft", soft:true, name:"Apertura a libro con mano sul petto", kind:"dinamico", sides:2, area:"colonna", equip:"Tappetino, cuscino",
+{id:"libro_soft", soft:true, name:"Apertura a libro con mano sul petto", kind:"dinamico", sides:2, area:"colonna", equip:"Tappetino, cuscino o foam roller",
  muscles:"Colonna toracica", sports:["surf","snow","wake","skate","gym","post"], zones:["col"], sideText:"lato {m} che apre",
  why:"Allena la rotazione toracica di curve, cutback e salti tenendo il braccio raccolto: la spalla non va aperta e ruotata, la posizione in cui esce più facilmente.",
- steps:["Sdraiati su un fianco, ginocchia piegate a 90° una sopra l'altra (cuscino tra le ginocchia).","Appoggia la mano del braccio sopra sul petto, gomito piegato.","Ruota il busto all'indietro portando il gomito verso il soffitto, solo fin dove è comodo.","Fermati 2-3 secondi espirando, poi torna."],
+ steps:["Sdraiati su un fianco, ginocchia piegate a 90° una sopra l'altra (cuscino tra le ginocchia, oppure il ginocchio sopra appoggiato sul foam roller: tiene fermo il bacino).","Appoggia la mano del braccio sopra sul petto, gomito piegato.","Ruota il busto all'indietro portando il gomito verso il soffitto, solo fin dove è comodo.","Fermati 2-3 secondi espirando, poi torna."],
  cue:"Mano sul petto, ruota il torace, ginocchia ferme.",
  mistakes:["Staccare le ginocchia per ruotare di più.","Lasciare il braccio aperto verso terra."],
  easier:"Movimento più piccolo.", harder:"Resta nella posizione aperta respirando lento."},
-{id:"foam_soft", soft:true, name:"Rullo toracico a braccia incrociate", kind:"dinamico", sides:1, area:"colonna", equip:"Foam roller o asciugamano arrotolato",
+{id:"foam_soft", soft:true, roller:true, name:"Rullo toracico a braccia incrociate", kind:"dinamico", sides:1, area:"colonna", equip:"Foam roller o asciugamano arrotolato",
  muscles:"Colonna toracica", sports:["surf","gym","wake","post"], zones:["col"],
  why:"Contrasta la postura curva e prepara la pagaiata senza mani dietro la testa, posizione che apre e ruota la spalla.",
  steps:["Seduto con il rullo dietro la schiena all'altezza delle scapole, braccia incrociate sul petto.","Appoggiati e lascia andare testa e spalle all'indietro sopra il rullo, glutei a terra.","Fai 3-4 estensioni lente, poi sposta il rullo di qualche centimetro più in alto e ripeti.","Mai sotto la zona lombare: solo la parte alta della schiena."],
@@ -985,6 +1055,7 @@ var WARN = {
   piccione:{groin:"Se pizzica davanti all'anca, usa il cuscino sotto il gluteo o passa alla figura 4 da supino."},
   novanta:{groin:"Se la gamba dietro pizzica all'inguine, tieni il busto dritto e riduci gli angoli."},
   figura4:{groin:"Se pizzica all'inguine, non tirare la coscia al petto: lascia il piede di appoggio a terra."},
+  rullo_glutei:{groin:"Se la gamba accavallata pizzica all'inguine, aprila meno o tieni entrambi i piedi a terra."},
   crossbody:{shoulder:"Va bene dopo una lussazione anteriore, la più comune. Se la tua era posteriore, saltalo."},
   ago:{shoulder:"Poco peso sul braccio d'appoggio. Se la lussazione era posteriore, saltalo."},
   sfinge:{shoulder:"Il peso sugli avambracci deve essere comodo: se la spalla protesta, metti un cuscino sotto il petto."},
@@ -996,7 +1067,7 @@ Object.keys(WARN).forEach(function(id){ EX[id].warn = WARN[id]; });
 var CAUTIONS = {
   shoulder:{pettorale:["remata"], dorsale:["rotesterna"], dislocazioni:["rotesterna"], cane:["ischio_piedi"], bruco:[], bambino:["bambino_soft"],
     libro:["libro_soft"], foam:["foam_soft"], torsione:["torsione_soft"], wallslide:["wallslide_soft"], laterale:["laterale_soft"],
-    wgs:["wgs_soft"], rotazioni:["rotazioni_soft"]},
+    wgs:["wgs_soft"], rotazioni:["rotazioni_soft"], rullo_dorsali:[], petto_rullo:[]},
   groin:{farfalla:["squeeze","addlift","flessori"], divaricata:["addlift"], cosacco:["squeeze"], legswing:["legswing_soft"], squat:["squat_soft"],
     couch:["flessori"], wgs:["wgs_soft"]}
 };
@@ -1080,9 +1151,15 @@ var POSES = {
   wallslide_soft:{p:[{t:"wall",x:140},{t:"arrow",pts:[134,26,134,10]}],f:[[110,78,108,102,107,126,116,127],[114,44,132,51,134,30]],b:[[110,78,114,44]],n:[[110,78,111,102,112,126,121,127],[114,44,133,54,134,33]],h:[118,32]},
   laterale_soft:{b:[[106,76,101,58,89,44],[81,51,97,38],[100,77,112,75]],n:[[100,77,98,101,96,125,91,127],[112,75,112,100,112,125,117,127],[97,38,114,50,112,70],[81,51,76,66,98,74]],h:[81,34],t:[109,58]},
   wgs_soft:{m:1,f:[[98,100,84,123,60,124,53,127],[118,70,116,88,120,98]],b:[[98,100,118,70]],n:[[98,100,124,98,122,124,131,127],[118,70,108,61,113,77]],h:[126,61],t:[100,105]},
-  rotazioni_soft:{p:[{t:"path",d:"M70 66A30 8 0 0 0 130 66",ah:[130,66,0.35,-1]}],b:[[100,76,100,42],[88,44,112,44],[94,76,106,76]],n:[[94,76,91,100,88,124,83,126],[106,76,109,100,112,124,117,126],[88,44,86,60,110,54],[112,44,114,60,90,54]],h:[100,30]}
+  rotazioni_soft:{p:[{t:"path",d:"M70 66A30 8 0 0 0 130 66",ah:[130,66,0.35,-1]}],b:[[100,76,100,42],[88,44,112,44],[94,76,106,76]],n:[[94,76,91,100,88,124,83,126],[106,76,109,100,112,124,117,126],[88,44,86,60,110,54],[112,44,114,60,90,54]],h:[100,30]},
+  rullo_polpacci:{m:1,p:[{t:"roller",x:118,y:118,r:9},{t:"arrow2",pts:[104,95,122,93]}],f:[[72,110,94,96,99,121,108,125],[50,85,46,104,43,122]],b:[[72,111,50,86]],n:[[72,111,98,108,124,105,129,97],[50,86,44,105,39,123]],h:[54,74],t:[112,105]},
+  rullo_quad:{m:1,p:[{t:"roller",x:80,y:118,r:9},{t:"arrow2",pts:[58,91,96,91]}],f:[[96,102,70,104,44,106,36,110],[130,103,129,123,149,123]],b:[[96,103,130,104]],n:[[96,103,70,106,44,109,36,113],[130,104,131,124,151,124]],h:[141,99],t:[82,106]},
+  rullo_ischio:{m:1,p:[{t:"roller",x:90,y:118,r:9},{t:"arrow2",pts:[80,92,108,92]}],f:[[70,105,96,102,122,101,126,92],[46,83,43,102,41,121]],b:[[70,106,46,84]],n:[[70,106,96,104,122,104,126,95],[46,84,41,103,37,122]],h:[51,73],t:[84,106]},
+  rullo_glutei:{m:1,p:[{t:"rollerlong",x:70,y:110,w:60,h:16}],f:[[82,79,75,98,70,117],[104,75,113,94,120,113]],b:[[98,104,93,77],[82,79,104,75],[90,105,106,103]],n:[[106,103,112,93,113,119,115,125],[90,105,82,100,108,92,115,90]],h:[92,65],t:[86,110]},
+  rullo_dorsali:{m:1,p:[{t:"roller",x:64,y:118,r:9},{t:"arrow2",pts:[66,93,90,101]}],f:[[92,121,118,122,144,123,152,123],[61,104,44,112,26,121]],b:[[92,120,61,104]],n:[[92,118,112,103,119,124,128,125],[61,102,70,116,86,123]],h:[49,100],t:[70,108]},
+  petto_rullo:{m:1,p:[{t:"rollerlong",x:33,y:110,w:60,h:16}],f:[[88,103,110,93,113,120,122,124],[54,103,59,114,66,123]],b:[[88,104,54,104]],n:[[88,104,111,94,114,121,123,125],[54,104,60,115,68,124]],h:[42,101],t:[64,99]},
 };
-var BACK_PROPS = ["wall","post","bench","roller","panel","ghosthead","seat","bandback"];
+var BACK_PROPS = ["wall","post","bench","roller","rollerlong","panel","ghosthead","seat","bandback"];
 
 function arrowHead(x, y, ux, uy){
   var L = Math.hypot(ux, uy) || 1; ux /= L; uy /= L;
@@ -1096,6 +1173,7 @@ function propSVG(pr){
     case "post": return '<rect class="wall" x="'+pr.x+'" y="4" width="7" height="124" rx="1"/>';
     case "bench": return '<rect class="wall" x="'+pr.x+'" y="'+pr.y+'" width="'+pr.w+'" height="7" rx="2"/><rect class="wall" x="'+(pr.x+4)+'" y="'+(pr.y+6)+'" width="5" height="'+(128-pr.y-6)+'"/><rect class="wall" x="'+(pr.x+pr.w-9)+'" y="'+(pr.y+6)+'" width="5" height="'+(128-pr.y-6)+'"/>';
     case "roller": return '<circle class="roller" cx="'+pr.x+'" cy="'+pr.y+'" r="'+pr.r+'"/>';
+    case "rollerlong": return '<rect class="roller" x="'+pr.x+'" y="'+pr.y+'" width="'+pr.w+'" height="'+pr.h+'" rx="'+(pr.h/2)+'"/>';
     case "seat": return '<rect class="wall" x="'+pr.x+'" y="'+pr.y+'" width="'+pr.w+'" height="7" rx="2"/>';
     case "cushion": return '<ellipse class="roller" cx="'+pr.x+'" cy="'+pr.y+'" rx="6.5" ry="6"/>';
     case "panel": return '<rect class="panel" x="'+pr.x+'" y="'+pr.y+'" width="'+pr.w+'" height="'+pr.h+'" rx="8"/>';
@@ -1215,25 +1293,30 @@ var TEMPLATES = {
      descGroin:"Apre flessori e glutei e rinforza gli adduttori: posizione più stabile sulla tavola senza irritare l'inguine.",
      desc:"Apre flessori, glutei e adduttori: posizione più bassa e stabile sulla tavola, curve più fluide e meno carico sulla schiena.",
      prio:["flessori","piccione","novanta","couch","farfalla","figura4","squat","ponte"],
-     flow:["squat","flessori","couch","piccione","novanta","farfalla","figura4","ponte"]},
+     flow:["squat","flessori","couch","piccione","novanta","farfalla","figura4","ponte"],
+     roll:["rullo_quad","rullo_glutei"]},
   B:{name:"Colonna e spalle", short:"COL", color:"#2f6fc4", sports:["surf","wake","gym","snow"],
      descShoulder:"Rotazione toracica e stabilità della spalla: pagaiata e trazione del cavo più sicure, senza esporre la spalla.",
      desc:"Rotazione toracica e spalle libere: pagaiata più lunga, trazione del cavo nel wake e overhead in palestra senza compensi.",
      prio:["libro","pettorale","dorsale","ago","crossbody","foam","bambino","sfinge","polsi","torsione"],
-     flow:["pettorale","crossbody","polsi","dorsale","ago","bambino","sfinge","foam","libro","torsione"]},
+     flow:["pettorale","crossbody","polsi","dorsale","ago","bambino","sfinge","foam","libro","torsione"],
+     roll:["rullo_dorsali","petto_rullo"]},
   C:{name:"Caviglie e catena posteriore", short:"CAV", color:"#0e8a8f", sports:["snow","skate","gym","surf"],
      desc:"Dorsiflessione, polpacci e ischiocrurali: ginocchia che avanzano sulla tavola, squat profondo e pop-up più pulito.",
      prio:["caviglia","polpaccio","ischio","divaricata","cane","couch","talloni","squat"],
-     flow:["caviglia","polpaccio","squat","couch","talloni","cane","divaricata","ischio"]},
+     flow:["caviglia","polpaccio","squat","couch","talloni","cane","divaricata","ischio"],
+     roll:["rullo_polpacci","rullo_ischio"]},
   D:{name:"Postura e core", short:"POS", color:"#7656b3", sports:["post","surf","gym"],
      descShoulder:"Allunga flessori e collo e rinforza scapole e glutei: la combinazione che migliora la postura proteggendo la spalla.",
      desc:"Allunga ciò che chiude (petto, flessori, collo) e attiva ciò che sostiene (scapole, glutei): è la combinazione che cambia la postura.",
      prio:["pettorale","flessori","couch","mento","wallslide","foam","trapezio","ponte","sfinge","gattomucca"],
-     flow:["pettorale","wallslide","mento","trapezio","flessori","couch","gattomucca","sfinge","foam","ponte"]},
+     flow:["pettorale","wallslide","mento","trapezio","flessori","couch","gattomucca","sfinge","foam","ponte"],
+     roll:["petto_rullo","rullo_quad"]},
   E:{name:"Total body", short:"TOT", color:"#c48a06", sports:["gym","snow","wake","surf","skate"],
      desc:"Il meglio di ogni zona in una sessione: tiene insieme i progressi della settimana.",
      prio:["flessori","piccione","ischio","pettorale","libro","caviglia","dorsale","couch","farfalla","divaricata","laterale","torsione","polsi"],
-     flow:["caviglia","pettorale","polsi","laterale","flessori","couch","dorsale","piccione","farfalla","divaricata","ischio","libro","torsione"]},
+     flow:["caviglia","pettorale","polsi","laterale","flessori","couch","dorsale","piccione","farfalla","divaricata","ischio","libro","torsione"],
+     roll:["rullo_ischio","rullo_glutei"]},
   F:{name:"Prima dello sport", short:"PRE", color:"#d9453d", sports:["snow","surf","wake","skate","gym"], maxMin:10,
      desc:"Solo mobilità dinamica, a casa o al parcheggio prima di uscire: scalda le articolazioni senza togliere esplosività.",
      prio:["wgs","legswing","rotazioni","caviglia","cosacco","dislocazioni","bruco","gattomucca"],
@@ -1241,21 +1324,25 @@ var TEMPLATES = {
   G:{name:"Recupero profondo", short:"REC", color:"#4f8a5b", sports:["snow","surf","wake","skate","gym"],
      desc:"Tenute morbide e respiro lento per scaricare dopo le giornate intense. Ideale la sera.",
      prio:["bambino","ischio","figura4","torsione","respiro","farfalla","divaricata","sfinge","talloni"],
-     flow:["talloni","bambino","sfinge","farfalla","divaricata","ischio","figura4","torsione","respiro"]},
+     flow:["talloni","bambino","sfinge","farfalla","divaricata","ischio","figura4","torsione","respiro"],
+     roll:["rullo_polpacci","rullo_glutei"]},
   L:{name:"Gambe complete", short:"GAM", color:"#e4572e", sports:["snow","skate","surf","wake","gym"],
      descGroin:"Anche, caviglie e catena posteriore, con rinforzo degli adduttori al posto degli allungamenti profondi.",
      desc:"Anche, caviglie e catena posteriore in una sessione: la base comune a tutti gli sport di tavola.",
      prio:["flessori","piccione","caviglia","ischio","couch","polpaccio","novanta","farfalla","divaricata","squat","figura4"],
-     flow:["caviglia","polpaccio","squat","flessori","couch","piccione","novanta","farfalla","divaricata","ischio","figura4"]},
+     flow:["caviglia","polpaccio","squat","flessori","couch","piccione","novanta","farfalla","divaricata","ischio","figura4"],
+     roll:["rullo_polpacci","rullo_quad"]},
   U:{name:"Parte alta e postura", short:"ALT", color:"#2f6fc4", sports:["surf","wake","gym","post"],
      descShoulder:"Toracica, collo e rinforzo di cuffia e scapole: per pagaiata, trazioni e postura, con la spalla protetta.",
      desc:"Toracica, spalle, collo e attivazione delle scapole: per pagaiata, trazioni e postura.",
      prio:["libro","pettorale","dorsale","mento","ago","crossbody","wallslide","foam","trapezio","polsi","sfinge","dislocazioni"],
-     flow:["dislocazioni","pettorale","crossbody","polsi","wallslide","mento","trapezio","dorsale","ago","sfinge","foam","libro"]},
+     flow:["dislocazioni","pettorale","crossbody","polsi","wallslide","mento","trapezio","dorsale","ago","sfinge","foam","libro"],
+     roll:["rullo_dorsali","petto_rullo"]},
   P:{name:"Dopo lo sport", short:"DOPO", color:"#4f8a5b", sports:["snow","surf","wake","skate","gym"],
      desc:"Defaticamento a fine uscita o allenamento, a muscoli caldi: il momento migliore per le tenute statiche.",
      prio:["flessori","figura4","ischio","polpaccio","bambino","pettorale","torsione","respiro"],
-     flow:["polpaccio","pettorale","flessori","bambino","ischio","figura4","torsione","respiro"]},
+     flow:["polpaccio","pettorale","flessori","bambino","ischio","figura4","torsione","respiro"],
+     roll:["rullo_quad","rullo_polpacci"]},
   Q:{name:"Pausa postura", short:"PAUSA", color:"#7656b3", sports:["post"], maxMin:6, maxHold:30,
      descShoulder:"Pochi minuti in piedi, anche al lavoro: collo, scapole e cuffia dei rotatori.",
      desc:"Pochi minuti in piedi, anche al lavoro: collo, petto e scapole.",
@@ -1309,8 +1396,14 @@ function buildSession(key, opts){
     });
   }
   picked.sort(function(a, b){ return flow.indexOf(a.id) - flow.indexOf(b.id); });
-  return {key:key, items:picked, seconds:used, hold:hold, minutes:minutes, tight:tight,
-    omitted:prio.length - picked.length,
+  var omitted = prio.length - picked.length;
+  /* Foam roller: si parte dal rullo sui muscoli che la sessione allunga, tempo in più rispetto ai minuti scelti */
+  var roll = (opts.roller && T.roll) ? adaptList(T.roll, opts).filter(function(id){ return !picked.some(function(it){ return it.id === id; }); }) : [];
+  var rollSec = 0;
+  roll.forEach(function(id){ rollSec += setCost(EX[id], hold, tight, true); });
+  picked = roll.map(function(id){ return {id:id, sets:1, roll:true}; }).concat(picked);
+  return {key:key, items:picked, seconds:used + rollSec, rollSeconds:rollSec, rollCount:roll.length, hold:hold, minutes:minutes, tight:tight,
+    omitted:omitted,
     capped:!!((T.maxMin && opts.minutes > T.maxMin) || (T.maxHold && opts.hold > T.maxHold))};
 }
 function weekCoverage(opts){
@@ -1328,7 +1421,7 @@ function weekCoverage(opts){
 
 /* ---------- Stato ---------- */
 var KEY = "riderStretch.v1";
-var DEFAULTS = {days:5, minutes:15, hold:45, tight:"none", sound:true, voice:false, shoulder:false, groin:false};
+var DEFAULTS = {days:5, minutes:15, hold:45, tight:"none", sound:true, voice:false, shoulder:false, groin:false, roller:true};
 var REV = 2;
 function load(){ try { return JSON.parse(localStorage.getItem(KEY)) || {}; } catch(e){ return {}; } }
 var stored = load();
@@ -1370,7 +1463,7 @@ function fmtMin(sec){ return Math.max(1, Math.round(sec/60)); }
 function sideFill(tpl, side){ return tpl.replace("{f}", SIDE_F[side]).replace("{m}", SIDE_M[side]); }
 function sideLabel(ex, side){
   if (side) return "Lato " + SIDE_M[side] + (ex.sideText ? " · " + sideFill(ex.sideText, side) : "");
-  return ex.kind === "statico" ? "Posizione unica" : ex.kind === "dinamico" ? "Movimento lento e continuo" : "Ripetizioni controllate";
+  return ex.kind === "statico" ? "Posizione unica" : ex.kind === "dinamico" ? "Movimento lento e continuo" : ex.kind === "rullo" ? "Scorri lento sul rullo" : "Ripetizioni controllate";
 }
 function doseText(it, hold){
   var ex = EX[it.id], d = exDur(ex, hold, false);
@@ -1389,11 +1482,12 @@ function renderControls(){
   $("#optSound").checked = !!S.sound;
   $("#optShoulder").checked = !!S.shoulder;
   $("#optGroin").checked = !!S.groin;
+  $("#optRoller").checked = !!S.roller;
   renderVoiceCtl();
   renderTimeVal();
 }
 function renderTimeVal(){
-  $("#timeVal").textContent = S.days + " giorni · " + S.minutes + " min · " + S.hold + " s" + (S.tight !== "none" ? " · lato " + S.tight : "") + (S.shoulder || S.groin ? " · protetta" : "");
+  $("#timeVal").textContent = S.days + " giorni · " + S.minutes + " min" + (S.roller ? " + rullo" : "") + " · " + S.hold + " s" + (S.tight !== "none" ? " · lato " + S.tight : "") + (S.shoulder || S.groin ? " · protetta" : "");
 }
 function renderVoiceCtl(){
   var ok = Voice.available();
@@ -1442,7 +1536,8 @@ function renderSession(){
   }).join("");
   var notes = "";
   if (s.capped) notes += '<p class="note">Sessione breve per natura: al massimo '+T.maxMin+' minuti'+(T.maxHold ? ' e tenute da '+T.maxHold+' s' : '')+'.</p>';
-  if (s.omitted > 0) notes += '<p class="note">Con '+s.minutes+' minuti restano i '+s.items.length+' esercizi più importanti di oggi. Altri '+s.omitted+' entrano con più tempo o tenute più brevi.</p>';
+  if (s.rollCount) notes += '<p class="note">Si parte con '+(s.rollCount === 1 ? "un esercizio" : s.rollCount+" esercizi")+' sul foam roller, circa '+fmtMin(s.rollSeconds)+' minuti in più dei '+s.minutes+' scelti: sciolgono i muscoli che allunghi subito dopo. Puoi toglierli in Personalizza.</p>';
+  if (s.omitted > 0) notes += '<p class="note">Con '+s.minutes+' minuti restano i '+(s.items.length - (s.rollCount || 0))+' esercizi più importanti di oggi. Altri '+s.omitted+' entrano con più tempo o tenute più brevi.</p>';
   notes += '<p class="note">Ordine pensato per cambiare posizione il meno possibile.</p>';
   var doneBtn = day !== null ? '<button class="btn secondary" data-act="toggle-done" aria-pressed="'+isDone(day)+'">'+(isDone(day) ? CHECK + "Fatta" : "Segna come fatta")+'</button>' : "";
   var guard = (S.shoulder || S.groin) ? '<button class="guard" data-act="show-cautions">'+SHIELD+'Versione protetta: '+cautionLabel()+'</button>' : '';
@@ -1524,7 +1619,7 @@ function renderLib(){
     + SPORT_ORDER.map(function(k){ return '<button class="chip" data-sport="'+k+'" aria-pressed="'+(UI.sport === k)+'">'+icon(k)+SPORTS[k].name+'</button>'; }).join("");
   var ids = adaptList(BASE_IDS, S);
   REHAB_IDS.forEach(function(id){ if (ids.indexOf(id) < 0) ids.push(id); });
-  var list = ids.map(function(id){ return EX[id]; }).filter(function(e){ return (UI.area === "all" || e.area === UI.area) && (UI.sport === "all" || e.sports.indexOf(UI.sport) >= 0); });
+  var list = ids.map(function(id){ return EX[id]; }).filter(function(e){ return (UI.area === "all" || e.area === UI.area || (UI.area === "rullo" && e.roller)) && (UI.sport === "all" || e.sports.indexOf(UI.sport) >= 0); });
   $("#libCount").textContent = list.length + (list.length === 1 ? " esercizio" : " esercizi") + (S.shoulder || S.groin ? " · versione protetta per " + cautionLabel() : "");
   $("#libGrid").innerHTML = list.map(function(e){
     return '<button class="card" data-ex="'+e.id+'"><span class="thumb" style="--ac:'+AREA_COLOR[e.area]+'">'+fig(e.id, "")+'</span><span class="card-body"><span class="card-name">'+esc(e.name)+'</span>'
@@ -1694,7 +1789,7 @@ function cue(st){
 function renderStep(){
   var st = PL.steps[PL.i], ex = EX[st.ex];
   $("#plFig").innerHTML = fig(st.ex, "Illustrazione: " + ex.name);
-  var phase = st.type === "hold" ? (ex.kind === "statico" ? "Tieni" : ex.kind === "dinamico" ? "Muoviti" : "Attiva")
+  var phase = st.type === "hold" ? (ex.kind === "statico" ? "Tieni" : ex.kind === "dinamico" ? "Muoviti" : ex.kind === "rullo" ? "Scorri" : "Attiva")
     : st.type === "switch" ? "Cambia lato" : (st.set > 1 ? "Serie " + st.set : "Preparati");
   var hold = st.type === "hold";
   $("#plPhase").textContent = phase;
@@ -1830,6 +1925,7 @@ document.addEventListener("change", function(e){
     S[el.id === "optShoulder" ? "shoulder" : "groin"] = el.checked; save(); renderTimeVal(); renderWeek();
     if (UI.tab === "lib") renderLib();
   }
+  else if (el.id === "optRoller"){ S.roller = el.checked; save(); renderTimeVal(); renderWeek(); }
   else if (el.id === "optSound"){ S.sound = el.checked; save(); if (S.sound) ensureAudio(); }
   else if (el.id === "optVoice"){ S.voice = el.checked; save(); if (S.voice) Voice.say("Guida vocale attiva."); }
 });
@@ -1857,6 +1953,13 @@ renderWeek();
 <script>
 if ("serviceWorker" in navigator && (location.protocol === "https:" || location.hostname === "localhost" || location.hostname === "127.0.0.1")) {
   window.addEventListener("load", function(){ navigator.serviceWorker.register("sw.js").catch(function(){}); });
+  /* Quando arriva una versione nuova dell'app, ricarica una volta (mai durante una sessione in corso) */
+  var hadController = !!navigator.serviceWorker.controller, reloaded = false;
+  navigator.serviceWorker.addEventListener("controllerchange", function(){
+    var pl = document.getElementById("player");
+    if (!hadController || reloaded || (pl && !pl.hidden)) return;
+    reloaded = true; location.reload();
+  });
 }
 </script>
 </body>
