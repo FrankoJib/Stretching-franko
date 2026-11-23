@@ -1,5 +1,5 @@
 /* Rider Stretch: funziona offline dopo la prima apertura e, quando c'è rete, carica sempre la versione più recente */
-const CACHE = "rider-stretch-v3";
+const CACHE = "rider-stretch-v4";
 const ASSETS = ["./", "./index.html", "./manifest.webmanifest", "./icon-192.png", "./icon-512.png", "./icon-maskable-512.png", "./apple-touch-icon.png"];
 
 self.addEventListener("install", (e) => {
