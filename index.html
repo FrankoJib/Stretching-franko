@@ -160,6 +160,44 @@ details.more[open] summary::before{transform:rotate(45deg)}
 .done .hole{background:var(--sea);border:0;color:#fff}
 .hole svg{width:12px;height:12px}
 
+/* Percorso a blocchi */
+.path{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:18px;padding:14px 16px 16px;box-shadow:var(--shadow);display:grid;gap:10px}
+.path-top{display:flex;justify-content:space-between;align-items:baseline;gap:10px}
+.path-top b{font-family:var(--font-display);font-size:26px;font-weight:800;text-transform:uppercase;line-height:1}
+.path-top span{font-size:13px;font-weight:700;color:var(--ink-2);white-space:nowrap}
+.path-bar{display:grid;grid-template-columns:repeat(12,minmax(0,1fr));gap:3px}
+.path-bar i{height:10px;border-radius:3px;background:var(--surface-2)}
+.path-bar i.past{background:var(--bc);opacity:.45}
+.path-bar i.now{background:var(--bc);box-shadow:0 0 0 2px var(--surface),0 0 0 4px var(--bc)}
+.path-blocks{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:3px;font-size:12px;font-weight:600;color:var(--ink-2)}
+.path-blocks span.cur{color:var(--ink);font-weight:800}
+.path-desc{font-size:14px;color:var(--ink-2)}
+.path-desc b{color:var(--ink)}
+.path-test{display:flex;align-items:center;justify-content:space-between;gap:12px;padding:12px;border-radius:14px;background:var(--sea-soft)}
+.path-test b{display:block}
+.path-test span{display:block;font-size:13px;color:var(--ink-2)}
+.path-test .btn{flex:none;min-height:46px;font-size:17px;padding:0 16px}
+.path-test.done{background:var(--surface-2)}
+.pathctl{display:flex;align-items:center;gap:12px}
+.pathctl span{min-width:132px;text-align:center;font-weight:700;font-variant-numeric:tabular-nums}
+.pathctl .iconbtn:disabled{opacity:.35;cursor:not-allowed}
+
+/* Test di mobilità */
+.tests{display:grid;gap:16px}
+.trow{display:grid;gap:8px;padding-top:14px;border-top:1px solid var(--line)}
+.trow:first-child{border-top:0;padding-top:0}
+.trow h4{font-size:17px;font-weight:700;margin:0}
+.trow p{margin:0;font-size:14px;color:var(--ink-2)}
+.tin{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.tin.one{grid-template-columns:minmax(0,1fr)}
+.tin label.tnum{display:grid;gap:4px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.tin input[type=number]{width:100%;min-height:46px;border-radius:12px;border:1px solid var(--line);background:var(--surface-2);color:var(--ink);font:inherit;font-size:18px;font-weight:700;padding:0 12px;font-variant-numeric:tabular-nums}
+.tin .side{display:grid;gap:4px}
+.tin .side > span{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
+.tref{font-size:13px}
+.tprev{color:var(--ink);font-weight:600}
+.pl-cue.push{color:#ff9a72;font-weight:700}
+
 /* Sessione */
 .session{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;scroll-margin-top:72px;box-shadow:var(--shadow)}
 .session-art{position:relative;display:flex;justify-content:center;background:var(--surface-2);background:color-mix(in srgb,var(--tc) 14%,var(--surface))}
@@ -429,9 +467,19 @@ details.more[open] summary::before{transform:rotate(45deg)}
             <input type="radio" name="hold" id="hold-60" value="60"><label for="hold-60">60 s<small>lunga</small></label>
             <input type="radio" name="hold" id="hold-90" value="90"><label for="hold-90">90 s<small>profonda</small></label>
           </div>
+          <p class="hint" id="holdHint" hidden></p>
         </div>
         <details class="more" id="more">
-          <summary>Personalizza: foam roller, lato più rigido, suoni, precauzioni</summary>
+          <summary>Personalizza: percorso, foam roller, lato più rigido, suoni, precauzioni</summary>
+          <div class="ctrl">
+            <span class="cap">Percorso</span>
+            <div class="pathctl">
+              <button class="iconbtn txt" data-act="path-prev" id="pathPrev" aria-label="Torna indietro di una settimana">−</button>
+              <span id="pathWeekVal"></span>
+              <button class="iconbtn txt" data-act="path-next" aria-label="Vai avanti di una settimana">+</button>
+            </div>
+            <p class="hint">Se salti una settimana, torna indietro di una: il blocco non avanza da solo mentre sei fermo. <button class="linkbtn" data-act="path-reset">Ricomincia dalla settimana 1</button></p>
+          </div>
           <div class="ctrl">
             <span class="cap">Attrezzatura</span>
             <div class="toggles" style="margin-top:2px">
@@ -462,6 +510,7 @@ details.more[open] summary::before{transform:rotate(45deg)}
       </details>
 
       <div class="pass" id="pass"></div>
+      <section class="path" id="path" aria-label="Il tuo percorso"></section>
       <article class="session" id="session" aria-live="polite"></article>
 
       <section class="extras" aria-labelledby="extrasTitle">
@@ -494,6 +543,17 @@ details.more[open] summary::before{transform:rotate(45deg)}
             <div><span class="kind attivazione">Attivazione</span><span>Contrazioni controllate per rinforzare la postura.</span></div>
             <div><span class="kind rullo">Rullo</span><span>Scorri lento sul foam roller; sui punti più duri fermati 10–20 secondi.</span></div>
           </div>
+        </article>
+        <article class="gcard">
+          <h3>Il tuo percorso</h3>
+          <p>La scheda cambia da sola: 12 settimane in tre blocchi da 4, poi il ciclo riparte con tenute un livello più lunghe.</p>
+          <ul>
+            <li><b>Base, settimane 1–4.</b> Impari gli esercizi e costruisci l'abitudine: è la costanza che fa adattare muscoli e tendini.</li>
+            <li><b>Profondità, settimane 5–8.</b> Tenute statiche di un livello più lunghe e contrai-rilassa su flessori, quadricipiti, ischiocrurali e glutei: al segnale spingi 5 secondi a metà forza contro l'allungamento, poi rilasci e vai un filo più a fondo. Mai con dolore, e mai su spalle e interno coscia.</li>
+            <li><b>Mobilità attiva, settimane 9–12.</b> Entrano 90/90 attivo, gamba tesa attiva, squat cosacco e rinforzo di spalle e adduttori: controlli con i muscoli l'ampiezza che hai guadagnato, quella che usi davvero sulla tavola.</li>
+            <li><b>Test di mobilità</b> all'inizio di ogni blocco: 6 prove in 5 minuti, sempre nello stesso modo, per vedere i progressi.</li>
+            <li>Se salti una settimana, in <i>Personalizza</i> torni indietro di una.</li>
+          </ul>
         </article>
         <article class="gcard">
           <h3>Le regole d'oro</h3>
@@ -632,21 +692,21 @@ var EX_LIST = [
  muscles:"Ileopsoas, retto femorale", sports:["snow","wake","surf","skate","gym","post"], zones:["flex"], sideText:"gamba {f} dietro",
  why:"Stare seduti e le posizioni accovacciate sulla tavola accorciano i flessori: tirano il bacino in avanti e caricano la zona lombare. Liberarli rende il pop-up più rapido, il pumping più ampio e la schiena più tranquilla.",
  steps:["In ginocchio su un cuscino, una gamba avanti con il piede a terra e il ginocchio a 90°.","Stringi il gluteo della gamba dietro e porta il coccige verso il basso (bacino in retroversione).","Sposta il peso in avanti di pochi centimetri tenendo il busto alto: senti tirare davanti all'anca della gamba dietro.","Per intensificare alza il braccio dello stesso lato e inclinati leggermente dalla parte opposta."],
- cue:"Gluteo stretto, coccige giù, busto alto.",
+ cue:"Gluteo stretto, coccige giù, busto alto.", pnfCue:"Premi il ginocchio dietro contro il pavimento, come per tirarlo in avanti.",
  mistakes:["Inarcare la zona lombare: lo stiramento finisce sulla schiena invece che sull'anca.","Affondare troppo: con il bacino in retroversione bastano pochi centimetri."],
  easier:"Busto leggermente più indietro e meno spostamento in avanti.", harder:"Braccio in alto con inclinazione laterale, oppure passa al couch stretch."},
 {id:"couch", name:"Couch stretch al muro", kind:"statico", sides:2, area:"gambe", equip:"Muro o divano, cuscino",
  muscles:"Retto femorale, quadricipite, flessori dell'anca", sports:["snow","skate","wake","surf","gym"], zones:["flex"], sideText:"gamba {f} dietro, piede al muro",
  why:"Il quadricipite lavora tantissimo nelle posizioni piegate di snowboard, wake e squat. Se è rigido tira rotula e bacino: ginocchia più cariche e meno estensione d'anca.",
  steps:["In ginocchio con le spalle al muro: appoggia il dorso del piede dietro contro il muro, ginocchio vicino al battiscopa su un cuscino.","Porta l'altro piede avanti in affondo.","Stringi il gluteo della gamba dietro e solleva lentamente il busto verso la verticale.","Se è troppo intenso allontana il ginocchio dal muro."],
- cue:"Gluteo contratto, sali col busto senza inarcare.",
+ cue:"Gluteo contratto, sali col busto senza inarcare.", pnfCue:"Spingi il dorso del piede contro il muro.",
  mistakes:["Inarcare la schiena per raddrizzare il busto.","Lasciare che il ginocchio dietro scivoli verso l'esterno."],
  easier:"Ginocchio più lontano dal muro e mani su un rialzo davanti.", harder:"Busto completamente verticale con glutei contratti."},
 {id:"piccione", name:"Piccione", kind:"statico", sides:2, area:"anche", equip:"Tappetino",
  muscles:"Grande gluteo, piriforme, extrarotatori dell'anca", sports:["snow","skate","surf","wake"], zones:["glu"], sideText:"gamba {f} davanti",
  why:"Gli extrarotatori si irrigidiscono con le ginocchia sempre piegate e le rotazioni della tavola. Liberarli aiuta carving e curve e scarica ginocchia e zona lombare.",
  steps:["Da quadrupedia porta un ginocchio verso la mano dello stesso lato, con la tibia obliqua davanti a te.","Allunga l'altra gamba dietro, dorso del piede a terra, bacino dritto verso il pavimento.","Resta sulle mani a busto alto oppure scendi sugli avambracci per aumentare.","Se il ginocchio davanti protesta, metti un cuscino sotto il gluteo o passa alla figura 4 da supino."],
- cue:"Bacino dritto e pesante, respira verso il gluteo.",
+ cue:"Bacino dritto e pesante, respira verso il gluteo.", pnfCue:"Premi il ginocchio e la tibia davanti contro il pavimento.",
  mistakes:["Lasciar cadere il bacino su un fianco.","Forzare con dolore al ginocchio della gamba davanti."],
  easier:"Cuscino sotto l'anca della gamba davanti, oppure figura 4 da supino.", harder:"Tibia più parallela al bordo del tappetino e busto sugli avambracci."},
 {id:"novanta", name:"90/90 per le anche", kind:"statico", sides:2, area:"anche", equip:"Tappetino",
@@ -674,7 +734,7 @@ var EX_LIST = [
  muscles:"Gluteo, piriforme", sports:["snow","skate","surf","wake","post"], zones:["glu"], sideText:"caviglia {f} sul ginocchio",
  why:"Versione gentile del piccione: stesso lavoro su glutei e piriforme senza carico sul ginocchio. Perfetta la sera o dopo una giornata in pista.",
  steps:["Sdraiato a pancia in su, piedi a terra. Appoggia la caviglia sul ginocchio opposto formando un 4.","Passa le mani dietro la coscia della gamba di appoggio e avvicinala al petto.","Testa e spalle restano a terra; spingi dolcemente il ginocchio della gamba incrociata in fuori."],
- cue:"Spalle rilassate, piede incrociato a martello.",
+ cue:"Spalle rilassate, piede incrociato a martello.", pnfCue:"Spingi la caviglia incrociata contro la coscia d'appoggio.",
  mistakes:["Sollevare testa e spalle per tirare.","Lasciare il piede incrociato morbido: tienilo flesso per proteggere il ginocchio."],
  easier:"Lascia il piede di appoggio a terra.", harder:"Avvicina di più la coscia al petto."},
 {id:"squat", name:"Squat profondo tenuto", kind:"statico", sides:1, area:"anche", equip:"Nessuno, un appoggio se serve",
@@ -695,7 +755,7 @@ var EX_LIST = [
  muscles:"Ischiocrurali, polpaccio", sports:["gym","wake","snow","skate","surf"], zones:["post"], sideText:"gamba {f} in alto",
  why:"Ischiocrurali rigidi limitano la flessione d'anca: la schiena si arrotonda negli stacchi, nel pop-up e nelle posizioni basse. Da supino la schiena resta protetta.",
  steps:["Sdraiato, passa l'elastico sotto la pianta di un piede.","Solleva la gamba tesa; l'altra resta distesa a terra (o piegata se tira la schiena).","Tira finché senti allungare dietro la coscia, ginocchio quasi disteso.","Ogni tanto porta la punta del piede verso di te per coinvolgere il polpaccio."],
- cue:"Bacino e altra gamba a terra, spalle rilassate.",
+ cue:"Bacino e altra gamba a terra, spalle rilassate.", pnfCue:"Spingi la gamba verso terra contro l'elastico.",
  mistakes:["Staccare il bacino da terra.","Bloccare il ginocchio con dolore dietro il ginocchio."],
  easier:"Ginocchio leggermente piegato e altra gamba con il piede a terra.", harder:"Porta la gamba un po' verso l'interno per la parte esterna della coscia."},
 {id:"polpaccio", name:"Polpaccio al muro", kind:"statico", sides:2, area:"gambe", equip:"Muro",
@@ -886,6 +946,23 @@ var EX_LIST = [
  mistakes:["Ruotare con le ginocchia bloccate.","Movimenti a scatti."],
  easier:"Ampiezza ridotta.", harder:"Aggiungi un passo laterale a ogni rotazione."},
 
+/* Mobilità attiva: entrano nel blocco 3 del percorso */
+{id:"novanta_attivo", pose:"novanta", name:"90/90 attivo", kind:"attivazione", sides:2, area:"anche", equip:"Tappetino",
+ muscles:"Rotatori dell'anca, glutei, flessori dell'anca", sports:["snow","skate","surf","wake","gym"], zones:["glu"], sideText:"gamba {f} davanti",
+ half:"Ora fai il tergicristallo: ruota le ginocchia dall'altra parte senza mani e torna, piano.",
+ why:"Usa la mobilità guadagnata con il 90/90: sollevare la gamba dietro senza aiuto allena i rotatori dell'anca proprio nell'ampiezza che ti serve per girare la tavola e atterrare stabile.",
+ steps:["Seduto in 90/90: gamba davanti ruotata in fuori, gamba dietro ruotata in dentro, busto dritto.","Mani a terra dietro di te o, se ci riesci, incrociate sul petto.","Solleva il ginocchio della gamba dietro di pochi centimetri, tieni 3 secondi e appoggia lento. Ripeti.","A metà tempo passa al tergicristallo: ruota le ginocchia dall'altra parte e torna, senza mani."],
+ cue:"Busto alto: sollevi poco, ma tieni fermo 3 secondi.",
+ mistakes:["Inclinare il busto all'indietro per alzare la gamba.","Andare veloce: conta il controllo, non l'altezza."],
+ easier:"Mani a terra dietro e sollevamento più piccolo.", harder:"Senza mani, sollevando anche il piede insieme al ginocchio."},
+{id:"gambatesa", name:"Gamba tesa attiva", kind:"attivazione", sides:2, area:"gambe", equip:"Tappetino",
+ muscles:"Flessori dell'anca, ischiocrurali", sports:["gym","snow","skate","surf","wake"], zones:["post"], sideText:"gamba {f} che sale",
+ why:"Alzare la gamba tesa senza aiuto allena i flessori a tenere l'ampiezza che l'elastico ti ha dato: è la mobilità che usi davvero nel pop-up, nei calci e nelle posizioni basse.",
+ steps:["Sdraiato a pancia in su, gambe distese, braccia lungo i fianchi.","Punta del piede verso di te: solleva una gamba tesa più in alto che puoi senza aiutarti.","Tieni 3 secondi in alto e scendi lento in 3 secondi. Ripeti fino al segnale.","L'altra gamba resta distesa a terra e la schiena non si inarca."],
+ cue:"Gamba tesa, punta verso di te, scendi lento.",
+ mistakes:["Piegare il ginocchio per salire di più.","Staccare la schiena o l'altra gamba da terra."],
+ easier:"Ginocchio della gamba a terra piegato, piede appoggiato.", harder:"In alto spingi 3 secondi la gamba contro la tua mano, poi lasciala e prova a salire ancora."},
+
 /* Foam roller: blocco iniziale delle sessioni, in più rispetto ai minuti scelti */
 {id:"rullo_polpacci", roller:true, name:"Polpacci sul rullo", kind:"rullo", sides:2, fixed:45, area:"rullo", equip:"Foam roller",
  muscles:"Gastrocnemio, soleo", sports:["snow","skate","surf","gym"], zones:[],
@@ -970,7 +1047,7 @@ var EX_LIST = [
  muscles:"Ischiocrurali, polpaccio", sports:["gym","wake","snow","skate","surf"], zones:["post"], sideText:"gamba {f} sul rialzo",
  why:"Allunga la catena posteriore senza caricare le spalle come il cane a testa in giù e senza aprire l'inguine.",
  steps:["In piedi davanti a un gradino o a una panca bassa, appoggia sopra il tallone con la gamba quasi tesa.","Mani sulle cosce, schiena lunga.","Piegati in avanti dalle anche portando il bacino indietro, finché senti tirare dietro la coscia.","Porta la punta del piede verso di te per coinvolgere anche il polpaccio."],
- cue:"Schiena lunga, piega dalle anche, punta verso di te.",
+ cue:"Schiena lunga, piega dalle anche, punta verso di te.", pnfCue:"Spingi il tallone in giù contro il rialzo.",
  mistakes:["Arrotondare la schiena per scendere.","Usare un rialzo troppo alto."],
  easier:"Rialzo più basso e ginocchio un po' piegato.", harder:"Rialzo un po' più alto, sempre con la schiena lunga."},
 {id:"squat_soft", soft:true, name:"Squat assistito a profondità comoda", kind:"statico", sides:1, area:"anche", equip:"Stipite o palo",
@@ -1152,6 +1229,7 @@ var POSES = {
   laterale_soft:{b:[[106,76,101,58,89,44],[81,51,97,38],[100,77,112,75]],n:[[100,77,98,101,96,125,91,127],[112,75,112,100,112,125,117,127],[97,38,114,50,112,70],[81,51,76,66,98,74]],h:[81,34],t:[109,58]},
   wgs_soft:{m:1,f:[[98,100,84,123,60,124,53,127],[118,70,116,88,120,98]],b:[[98,100,118,70]],n:[[98,100,124,98,122,124,131,127],[118,70,108,61,113,77]],h:[126,61],t:[100,105]},
   rotazioni_soft:{p:[{t:"path",d:"M70 66A30 8 0 0 0 130 66",ah:[130,66,0.35,-1]}],b:[[100,76,100,42],[88,44,112,44],[94,76,106,76]],n:[[94,76,91,100,88,124,83,126],[106,76,109,100,112,124,117,126],[88,44,86,60,110,54],[112,44,114,60,90,54]],h:[100,30]},
+  gambatesa:{m:1,p:[{t:"arrow",pts:[97,102,92,80]}],f:[[84,121,111,122,137,123,139,115],[50,121,68,123,86,124]],b:[[50,121,84,121]],n:[[84,121,79,95,74,70,82,67],[50,121,66,124,84,125]],h:[38,119],t:[89,105]},
   rullo_polpacci:{m:1,p:[{t:"roller",x:118,y:118,r:9},{t:"arrow2",pts:[104,95,122,93]}],f:[[72,110,94,96,99,121,108,125],[50,85,46,104,43,122]],b:[[72,111,50,86]],n:[[72,111,98,108,124,105,129,97],[50,86,44,105,39,123]],h:[54,74],t:[112,105]},
   rullo_quad:{m:1,p:[{t:"roller",x:80,y:118,r:9},{t:"arrow2",pts:[58,91,96,91]}],f:[[96,102,70,104,44,106,36,110],[130,103,129,123,149,123]],b:[[96,103,130,104]],n:[[96,103,70,106,44,109,36,113],[130,104,131,124,151,124]],h:[141,99],t:[82,106]},
   rullo_ischio:{m:1,p:[{t:"roller",x:90,y:118,r:9},{t:"arrow2",pts:[80,92,108,92]}],f:[[70,105,96,102,122,101,126,92],[46,83,43,102,41,121]],b:[[70,106,46,84]],n:[[70,106,96,104,122,104,126,95],[46,84,41,103,37,122]],h:[51,73],t:[84,106]},
@@ -1290,60 +1368,74 @@ function fig(id, label, tight){
 /* ---------- Sessioni e scheda settimanale ---------- */
 var TEMPLATES = {
   A:{name:"Anche e gambe", short:"ANC", color:"#e4572e", sports:["snow","skate","surf","wake"],
+     prio3:["flessori","piccione","novanta_attivo","couch","farfalla","addlift","figura4","squat"],
+     flow3:["squat","flessori","couch","novanta_attivo","piccione","figura4","farfalla","addlift"],
      descGroin:"Apre flessori e glutei e rinforza gli adduttori: posizione più stabile sulla tavola senza irritare l'inguine.",
      desc:"Apre flessori, glutei e adduttori: posizione più bassa e stabile sulla tavola, curve più fluide e meno carico sulla schiena.",
      prio:["flessori","piccione","novanta","couch","farfalla","figura4","squat","ponte"],
      flow:["squat","flessori","couch","piccione","novanta","farfalla","figura4","ponte"],
      roll:["rullo_quad","rullo_glutei"]},
   B:{name:"Colonna e spalle", short:"COL", color:"#2f6fc4", sports:["surf","wake","gym","snow"],
+     prio3:["libro","remata","rotesterna","pettorale","torsione","ago","dorsale","foam","crossbody","sfinge","bambino","polsi"],
+     flow3:["remata","rotesterna","pettorale","crossbody","polsi","dorsale","ago","bambino","sfinge","foam","libro","torsione"],
      descShoulder:"Rotazione toracica e stabilità della spalla: pagaiata e trazione del cavo più sicure, senza esporre la spalla.",
      desc:"Rotazione toracica e spalle libere: pagaiata più lunga, trazione del cavo nel wake e overhead in palestra senza compensi.",
-     prio:["libro","pettorale","dorsale","ago","crossbody","foam","bambino","sfinge","polsi","torsione"],
+     prio:["libro","pettorale","dorsale","ago","crossbody","torsione","foam","bambino","sfinge","polsi"],
      flow:["pettorale","crossbody","polsi","dorsale","ago","bambino","sfinge","foam","libro","torsione"],
      roll:["rullo_dorsali","petto_rullo"]},
   C:{name:"Caviglie e catena posteriore", short:"CAV", color:"#0e8a8f", sports:["snow","skate","gym","surf"],
+     prio3:["caviglia","polpaccio","gambatesa","ischio","squat","cosacco","talloni","couch","cane","divaricata"],
+     flow3:["caviglia","polpaccio","cosacco","squat","couch","talloni","cane","divaricata","ischio","gambatesa"],
      desc:"Dorsiflessione, polpacci e ischiocrurali: ginocchia che avanzano sulla tavola, squat profondo e pop-up più pulito.",
      prio:["caviglia","polpaccio","ischio","divaricata","cane","couch","talloni","squat"],
      flow:["caviglia","polpaccio","squat","couch","talloni","cane","divaricata","ischio"],
      roll:["rullo_polpacci","rullo_ischio"]},
   D:{name:"Postura e core", short:"POS", color:"#7656b3", sports:["post","surf","gym"],
+     prio3:["flessori","remata","pettorale","couch","wallslide","mento","ponte","foam","trapezio","sfinge","gattomucca"],
+     flow3:["remata","pettorale","wallslide","mento","trapezio","flessori","couch","gattomucca","sfinge","foam","ponte"],
      descShoulder:"Allunga flessori e collo e rinforza scapole e glutei: la combinazione che migliora la postura proteggendo la spalla.",
      desc:"Allunga ciò che chiude (petto, flessori, collo) e attiva ciò che sostiene (scapole, glutei): è la combinazione che cambia la postura.",
      prio:["pettorale","flessori","couch","mento","wallslide","foam","trapezio","ponte","sfinge","gattomucca"],
      flow:["pettorale","wallslide","mento","trapezio","flessori","couch","gattomucca","sfinge","foam","ponte"],
      roll:["petto_rullo","rullo_quad"]},
   E:{name:"Total body", short:"TOT", color:"#c48a06", sports:["gym","snow","wake","surf","skate"],
+     prio3:["novanta_attivo","gambatesa","flessori","piccione","ischio","caviglia","pettorale","libro","farfalla","remata","couch","dorsale","divaricata","laterale","torsione","polsi"],
+     flow3:["caviglia","remata","pettorale","polsi","laterale","flessori","couch","dorsale","novanta_attivo","piccione","farfalla","divaricata","ischio","gambatesa","libro","torsione"],
      desc:"Il meglio di ogni zona in una sessione: tiene insieme i progressi della settimana.",
      prio:["flessori","piccione","ischio","pettorale","libro","caviglia","dorsale","couch","farfalla","divaricata","laterale","torsione","polsi"],
      flow:["caviglia","pettorale","polsi","laterale","flessori","couch","dorsale","piccione","farfalla","divaricata","ischio","libro","torsione"],
      roll:["rullo_ischio","rullo_glutei"]},
-  F:{name:"Prima dello sport", short:"PRE", color:"#d9453d", sports:["snow","surf","wake","skate","gym"], maxMin:10,
+  F:{name:"Prima dello sport", short:"PRE", color:"#d9453d", sports:["snow","surf","wake","skate","gym"], maxMin:10, prog:false,
      desc:"Solo mobilità dinamica, a casa o al parcheggio prima di uscire: scalda le articolazioni senza togliere esplosività.",
      prio:["wgs","legswing","rotazioni","caviglia","cosacco","dislocazioni","bruco","gattomucca"],
      flow:["gattomucca","bruco","wgs","caviglia","legswing","cosacco","rotazioni","dislocazioni"]},
-  G:{name:"Recupero profondo", short:"REC", color:"#4f8a5b", sports:["snow","surf","wake","skate","gym"],
+  G:{name:"Recupero profondo", short:"REC", color:"#4f8a5b", sports:["snow","surf","wake","skate","gym"], pnf:false, prog:false,
      desc:"Tenute morbide e respiro lento per scaricare dopo le giornate intense. Ideale la sera.",
      prio:["bambino","ischio","figura4","torsione","respiro","farfalla","divaricata","sfinge","talloni"],
      flow:["talloni","bambino","sfinge","farfalla","divaricata","ischio","figura4","torsione","respiro"],
      roll:["rullo_polpacci","rullo_glutei"]},
   L:{name:"Gambe complete", short:"GAM", color:"#e4572e", sports:["snow","skate","surf","wake","gym"],
+     prio3:["novanta_attivo","gambatesa","flessori","caviglia","piccione","farfalla","ischio","polpaccio","couch","addlift","squat","figura4"],
+     flow3:["caviglia","polpaccio","squat","flessori","couch","novanta_attivo","piccione","farfalla","addlift","ischio","gambatesa","figura4"],
      descGroin:"Anche, caviglie e catena posteriore, con rinforzo degli adduttori al posto degli allungamenti profondi.",
      desc:"Anche, caviglie e catena posteriore in una sessione: la base comune a tutti gli sport di tavola.",
      prio:["flessori","piccione","caviglia","ischio","couch","polpaccio","novanta","farfalla","divaricata","squat","figura4"],
      flow:["caviglia","polpaccio","squat","flessori","couch","piccione","novanta","farfalla","divaricata","ischio","figura4"],
      roll:["rullo_polpacci","rullo_quad"]},
   U:{name:"Parte alta e postura", short:"ALT", color:"#2f6fc4", sports:["surf","wake","gym","post"],
+     prio3:["remata","rotesterna","libro","pettorale","mento","wallslide","dorsale","ago","crossbody","foam","trapezio","polsi","sfinge"],
+     flow3:["remata","rotesterna","pettorale","crossbody","polsi","wallslide","mento","trapezio","dorsale","ago","sfinge","foam","libro"],
      descShoulder:"Toracica, collo e rinforzo di cuffia e scapole: per pagaiata, trazioni e postura, con la spalla protetta.",
      desc:"Toracica, spalle, collo e attivazione delle scapole: per pagaiata, trazioni e postura.",
      prio:["libro","pettorale","dorsale","mento","ago","crossbody","wallslide","foam","trapezio","polsi","sfinge","dislocazioni"],
      flow:["dislocazioni","pettorale","crossbody","polsi","wallslide","mento","trapezio","dorsale","ago","sfinge","foam","libro"],
      roll:["rullo_dorsali","petto_rullo"]},
-  P:{name:"Dopo lo sport", short:"DOPO", color:"#4f8a5b", sports:["snow","surf","wake","skate","gym"],
+  P:{name:"Dopo lo sport", short:"DOPO", color:"#4f8a5b", sports:["snow","surf","wake","skate","gym"], pnf:false,
      desc:"Defaticamento a fine uscita o allenamento, a muscoli caldi: il momento migliore per le tenute statiche.",
      prio:["flessori","figura4","ischio","polpaccio","bambino","pettorale","torsione","respiro"],
      flow:["polpaccio","pettorale","flessori","bambino","ischio","figura4","torsione","respiro"],
      roll:["rullo_quad","rullo_polpacci"]},
-  Q:{name:"Pausa postura", short:"PAUSA", color:"#7656b3", sports:["post"], maxMin:6, maxHold:30,
+  Q:{name:"Pausa postura", short:"PAUSA", color:"#7656b3", sports:["post"], maxMin:6, maxHold:30, prog:false,
      descShoulder:"Pochi minuti in piedi, anche al lavoro: collo, scapole e cuffia dei rotatori.",
      desc:"Pochi minuti in piedi, anche al lavoro: collo, petto e scapole.",
      prio:["mento","pettorale","trapezio","wallslide","laterale","polsi"],
@@ -1373,11 +1465,25 @@ function setCost(ex, hold, tight, first){
   }
   return lead + exDur(ex, hold, false);
 }
+/* Percorso: blocco 1 Base, 2 Profondità (tenute +1 livello, contrai-rilassa), 3 Mobilità attiva (tenute base, esercizi attivi); dal 2° ciclo tenute +1 livello */
+var HOLD_STEPS = [30,45,60,90];
+function stepHold(h, n){
+  var i = HOLD_STEPS.indexOf(h);
+  if (i < 0 || n <= 0) return h;
+  var cap = h >= 60 ? 90 : 60; /* chi parte da tenute brevi non va oltre i 60 s */
+  return Math.max(h, Math.min(HOLD_STEPS[Math.min(HOLD_STEPS.length - 1, i + n)], cap));
+}
+function pathOf(opts){
+  var P = (typeof PATH === "object" && PATH) ? PATH : {block:1, cycle:1};
+  return {block:opts.block || P.block, cycle:opts.cycle || P.cycle};
+}
+function progHold(hold, pp){ return stepHold(hold, (pp.block === 2 ? 1 : 0) + (pp.cycle >= 2 ? 1 : 0)); }
 function buildSession(key, opts){
-  var T = TEMPLATES[key];
-  var prio = adaptList(T.prio, opts), flow = adaptList(T.flow, opts);
+  var T = TEMPLATES[key], pp = pathOf(opts), active = pp.block === 3 && !!T.prio3;
+  var prio = adaptList(active ? T.prio3 : T.prio, opts), flow = adaptList(active ? T.flow3 : T.flow, opts);
   var minutes = Math.min(opts.minutes, T.maxMin || 999);
   var hold = Math.min(opts.hold, T.maxHold || 999);
+  if (T.prog !== false) hold = progHold(hold, pp);
   var tight = opts.tight || "none";
   var budget = minutes*60, used = 0, picked = [];
   prio.forEach(function(id){
@@ -1396,13 +1502,14 @@ function buildSession(key, opts){
     });
   }
   picked.sort(function(a, b){ return flow.indexOf(a.id) - flow.indexOf(b.id); });
+  if (pp.block === 2 && T.pnf !== false) picked.forEach(function(it){ if (EX[it.id].pnfCue) it.pnf = true; });
   var omitted = prio.length - picked.length;
   /* Foam roller: si parte dal rullo sui muscoli che la sessione allunga, tempo in più rispetto ai minuti scelti */
   var roll = (opts.roller && T.roll) ? adaptList(T.roll, opts).filter(function(id){ return !picked.some(function(it){ return it.id === id; }); }) : [];
   var rollSec = 0;
   roll.forEach(function(id){ rollSec += setCost(EX[id], hold, tight, true); });
   picked = roll.map(function(id){ return {id:id, sets:1, roll:true}; }).concat(picked);
-  return {key:key, items:picked, seconds:used + rollSec, rollSeconds:rollSec, rollCount:roll.length, hold:hold, minutes:minutes, tight:tight,
+  return {key:key, items:picked, seconds:used + rollSec, rollSeconds:rollSec, rollCount:roll.length, hold:hold, minutes:minutes, tight:tight, block:pp.block, cycle:pp.cycle,
     omitted:omitted,
     capped:!!((T.maxMin && opts.minutes > T.maxMin) || (T.maxHold && opts.hold > T.maxHold))};
 }
@@ -1428,7 +1535,7 @@ var stored = load();
 var S = Object.assign({}, DEFAULTS, stored.settings || {});
 var DONE = stored.done || {};
 if ((stored.rev || 1) < REV){ S.shoulder = false; S.groin = false; } /* scheda completa: precauzioni solo se attivate a mano */
-function save(){ try { localStorage.setItem(KEY, JSON.stringify({settings:S, done:DONE, rev:REV})); } catch(e){} }
+function save(){ try { localStorage.setItem(KEY, JSON.stringify({settings:S, done:DONE, rev:REV, start:START, tests:TESTS})); } catch(e){} }
 
 function isoWeek(d){
   var x = new Date(Date.UTC(d.getFullYear(), d.getMonth(), d.getDate()));
@@ -1442,6 +1549,80 @@ var TODAY = (NOW.getDay() + 6) % 7;
 var WK = isoWeek(NOW);
 var WEEK_KEY = WK.year + "-W" + WK.week;
 var MONDAY = new Date(NOW.getFullYear(), NOW.getMonth(), NOW.getDate() - TODAY);
+
+/* ---------- Percorso a blocchi ---------- */
+function isoDate(d){ return d.getFullYear() + "-" + String(d.getMonth() + 1).padStart(2, "0") + "-" + String(d.getDate()).padStart(2, "0"); }
+function parseDate(x){ var p = String(x).split("-"); return new Date(+p[0], +p[1] - 1, +p[2]); }
+var START = (typeof stored.start === "string" && /^\d{4}-\d{2}-\d{2}$/.test(stored.start)) ? stored.start : isoDate(MONDAY);
+var TESTS = Array.isArray(stored.tests) ? stored.tests : [];
+var BLOCKS = [
+  {name:"Base", color:"#0e8a8f", desc:"Impari gli esercizi e costruisci l'abitudine."},
+  {name:"Profondità", color:"#e2461a", desc:"Tenute più lunghe e contrai-rilassa sugli allungamenti chiave: il timer ti dice quando spingere e quando rilasciare."},
+  {name:"Mobilità attiva", color:"#7656b3", desc:"Esercizi in cui controlli con i muscoli l'ampiezza guadagnata, più rinforzo di spalle e adduttori."}
+];
+function pathInfo(){
+  var w = Math.max(1, Math.round((MONDAY - parseDate(START)) / 6048e5) + 1);
+  var cw = (w - 1) % 12 + 1;
+  return {week:w, cw:cw, cycle:Math.floor((w - 1) / 12) + 1, block:cw <= 4 ? 1 : cw <= 8 ? 2 : 3, test:cw === 1 || cw === 5 || cw === 9};
+}
+var PATH = pathInfo();
+if (!stored.start) save();
+function shiftPath(weeks){
+  var d = parseDate(START); d.setDate(d.getDate() + 7*weeks);
+  if (d > MONDAY) d = new Date(MONDAY);
+  START = isoDate(d); PATH = pathInfo(); save();
+  renderControls(); renderWeek();
+}
+function effHold(){ return progHold(S.hold, PATH); }
+function fmtDay(d){ return d.toLocaleDateString("it-IT", {weekday:"long", day:"numeric", month:"long"}); }
+
+/* Test di mobilità: 6 prove semplici da fare a casa, all'inizio di ogni blocco */
+var TEST_LIST = [
+  {id:"kw", name:"Ginocchio al muro", type:"cm2", ref:"Buono da 10 cm in su per lato.",
+   how:"In piedi davanti al muro, tallone a terra: allontana il piede finché il ginocchio tocca ancora il muro. Misura la distanza tra alluce e muro."},
+  {id:"reach", name:"Mani verso le punte", type:"cm", ref:"Buono da 0 in su: arrivi alle punte dei piedi.",
+   how:"Seduto a terra a gambe tese, piedi a martello. Scendi lento con le mani una sopra l'altra e misura: in negativo i centimetri che mancano alle punte (es. −5), in positivo quelli che le superi."},
+  {id:"thomas", name:"Flessori sul bordo del letto", type:"yn2", sides:["Coscia destra","Coscia sinistra"], ref:"Buono se la coscia resta appoggiata al letto.",
+   how:"Sdraiato sul bordo del letto con le gambe fuori dal ginocchio in giù, porta un ginocchio al petto con le mani. L'altra coscia resta appoggiata?"},
+  {id:"squat", name:"Squat profondo", type:"opt", opts:["Senza appoggio","Con appoggio","No"], ref:"Buono se resti 30 secondi senza appoggio, talloni a terra.",
+   how:"Scendi nello squat più profondo che puoi con i talloni a terra e resta 30 secondi."},
+  {id:"braccia", name:"Braccia al muro", type:"yn", ref:"Buono se i pollici toccano il muro. Fermati se la spalla dà fastidio.",
+   how:"Schiena, glutei e testa al muro, piedi a 10 cm. Alza le braccia tese davanti fino sopra la testa: i pollici toccano il muro senza staccare la schiena?"},
+  {id:"rot", name:"Rotazione del busto", type:"yn2", sides:["Verso destra","Verso sinistra"], ref:"Buono se la scapola arriva a terra.",
+   how:"Apertura a libro con la mano sul petto e le ginocchia unite: la scapola del braccio che apre arriva a terra?"}
+];
+var TEST_KEYS = {kw:["kwDx","kwSx"], reach:["reach"], thomas:["thomasDx","thomasSx"], squat:["squat"], braccia:["braccia"], rot:["rotDx","rotSx"]};
+function testThisWeek(){ var m = isoDate(MONDAY); for (var i = TESTS.length - 1; i >= 0; i--) if (TESTS[i].date >= m) return TESTS[i]; return null; }
+function testBefore(){ var m = isoDate(MONDAY), out = null; TESTS.forEach(function(t){ if (t.date < m) out = t; }); return out; }
+function testPass(t, r){
+  var k = TEST_KEYS[t.id], vals = k.map(function(x){ return r[x]; }).filter(function(v){ return v !== undefined && v !== null; });
+  if (!vals.length) return null;
+  if (t.id === "kw") return vals.every(function(v){ return v >= 10; });
+  if (t.id === "reach") return vals[0] >= 0;
+  if (t.id === "squat") return vals[0] === 0;
+  return vals.every(function(v){ return v === 1; });
+}
+function passCount(r){ var p = 0, n = 0; TEST_LIST.forEach(function(t){ var x = testPass(t, r); if (x !== null){ n++; if (x) p++; } }); return {p:p, n:n}; }
+function fmtNum(v){ return (v > 0 ? "+" : v < 0 ? "−" : "") + String(Math.abs(v)).replace(".", ","); }
+function cmTxt(v){ return String(v).replace("-", "−").replace(".", ",") + " cm"; }
+function testValTxt(t, r){
+  var k = TEST_KEYS[t.id], yn = function(v){ return v === 1 ? "sì" : v === 0 ? "no" : "–"; };
+  if (t.type === "cm2") return (r.kwDx !== undefined ? "dx " + cmTxt(r.kwDx) : "dx –") + ", " + (r.kwSx !== undefined ? "sx " + cmTxt(r.kwSx) : "sx –");
+  if (t.type === "cm") return r.reach !== undefined ? cmTxt(r.reach) : "–";
+  if (t.type === "opt") return r.squat !== undefined ? t.opts[r.squat].toLowerCase() : "–";
+  if (t.type === "yn2") return "dx " + yn(r[k[0]]) + ", sx " + yn(r[k[1]]);
+  return yn(r[k[0]]);
+}
+function testSummary(){
+  if (!TESTS.length) return "";
+  var first = TESTS[0], last = TESTS[TESTS.length - 1], pl = passCount(last.r);
+  if (TESTS.length === 1) return "Prove superate: " + pl.p + " su " + pl.n + ".";
+  var bits = [], pf = passCount(first.r);
+  var kw = ["kwDx","kwSx"].map(function(x, j){ return (first.r[x] !== undefined && last.r[x] !== undefined) ? (j ? "sx " : "dx ") + fmtNum(last.r[x] - first.r[x]) : null; }).filter(Boolean);
+  if (kw.length) bits.push("ginocchio al muro " + kw.join(", ") + " cm");
+  if (first.r.reach !== undefined && last.r.reach !== undefined) bits.push("mani verso le punte " + fmtNum(last.r.reach - first.r.reach) + " cm");
+  return "Dal primo test" + (bits.length ? ": " + bits.join("; ") + "." : ".") + " Prove superate: " + pf.p + " su " + pf.n + " allora, " + pl.p + " su " + pl.n + " adesso.";
+}
 function doneList(){ return DONE[WEEK_KEY] || []; }
 function isDone(i){ return doneList().indexOf(i) >= 0; }
 function setDone(i, v){
@@ -1470,6 +1651,7 @@ function doseText(it, hold){
   var t = (it.sets > 1 ? it.sets + " × " : "") + fmtSec(d);
   if (ex.sides === 2) t += " per lato";
   if (ex.sides === 2 && S.tight !== "none" && !ex.fixed) t += " · +50% a " + SIDE_F[S.tight];
+  if (it.pnf) t += " · contrai‑rilassa";
   return t;
 }
 
@@ -1483,6 +1665,9 @@ function renderControls(){
   $("#optShoulder").checked = !!S.shoulder;
   $("#optGroin").checked = !!S.groin;
   $("#optRoller").checked = !!S.roller;
+  $("#pathWeekVal").textContent = "Settimana " + PATH.week + (PATH.cycle > 1 ? " · ciclo " + PATH.cycle : "");
+  $("#pathPrev").disabled = PATH.week <= 1;
+  renderHoldHint();
   renderVoiceCtl();
   renderTimeVal();
 }
@@ -1527,7 +1712,7 @@ function renderSession(){
   UI.session = s; UI.sessionDay = day;
   el.style.setProperty("--tc", T.color);
   var allMove = s.items.every(function(it){ return EX[it.id].kind !== "statico"; });
-  var eyebrow = day !== null ? DAYS[day] + (day === TODAY ? " · oggi" : "") : "Sessione extra";
+  var eyebrow = day !== null ? DAYS[day] + (day === TODAY ? " · oggi" : "") + " · " + BLOCKS[s.block - 1].name : "Sessione extra";
   var rows = s.items.map(function(it, n){
     var ex = EX[it.id];
     return '<li><button class="exrow" data-ex="'+ex.id+'"><span class="thumb" style="--ac:'+AREA_COLOR[ex.area]+'"><span class="num">'+(n+1)+'</span>'+fig(ex.id, "")+'</span>'
@@ -1536,6 +1721,8 @@ function renderSession(){
   }).join("");
   var notes = "";
   if (s.capped) notes += '<p class="note">Sessione breve per natura: al massimo '+T.maxMin+' minuti'+(T.maxHold ? ' e tenute da '+T.maxHold+' s' : '')+'.</p>';
+  if (day !== null && s.block === 2) notes += '<p class="note">Blocco Profondità: tenute da '+s.hold+' s. Negli esercizi con contrai-rilassa il timer ti dice quando spingere, sempre a metà forza e senza dolore, e quando rilasciare.</p>';
+  if (day !== null && s.block === 3) notes += '<p class="note">Blocco Mobilità attiva: entrano esercizi in cui controlli con i muscoli l\'ampiezza guadagnata.</p>';
   if (s.rollCount) notes += '<p class="note">Si parte con '+(s.rollCount === 1 ? "un esercizio" : s.rollCount+" esercizi")+' sul foam roller, circa '+fmtMin(s.rollSeconds)+' minuti in più dei '+s.minutes+' scelti: sciolgono i muscoli che allunghi subito dopo. Puoi toglierli in Personalizza.</p>';
   if (s.omitted > 0) notes += '<p class="note">Con '+s.minutes+' minuti restano i '+(s.items.length - (s.rollCount || 0))+' esercizi più importanti di oggi. Altri '+s.omitted+' entrano con più tempo o tenute più brevi.</p>';
   notes += '<p class="note">Ordine pensato per cambiare posizione il meno possibile.</p>';
@@ -1570,7 +1757,7 @@ function renderCoverage(){
   }).join("");
   var pausedNote = S.shoulder && S.groin ? " Con le precauzioni attive, adduttori e spalle lavorano soprattutto in rinforzo." : S.groin ? " Con la precauzione per l'inguine, gli adduttori lavorano soprattutto in rinforzo." : S.shoulder ? " Con la precauzione per la spalla, le spalle lavorano soprattutto in stabilità." : "";
   $("#coverage").innerHTML = '<h2 class="section-title" id="covTitle">Copertura della settimana</h2>'
-    + '<p class="cov-sub">Minuti per lato su ogni zona con le impostazioni attuali ('+S.days+' giorni × '+S.minutes+' min, '+S.hold+' s). Per migliorare la mobilità servono circa '+TARGET_MIN+' minuti a settimana per zona.'+pausedNote+'</p>'
+    + '<p class="cov-sub">Minuti per lato su ogni zona con le impostazioni attuali ('+S.days+' giorni × '+S.minutes+' min, tenute da '+effHold()+' s). Per migliorare la mobilità servono circa '+TARGET_MIN+' minuti a settimana per zona.'+pausedNote+'</p>'
     + '<div class="cov-list">'+rows+'</div>' + coverageFix(z)
     + '<div class="cov-legend"><span><i class="cov-target" style="position:static;display:inline-block;height:12px;width:2px"></i>riferimento '+TARGET_MIN+' min</span><span>Scala 0–'+max+' min</span></div>';
 }
@@ -1592,7 +1779,86 @@ function coverageFix(z){
     return '<button class="linkbtn" data-act="set-plan" data-days="'+o.days+'" data-min="'+o.minutes+'">'+o.days+' giorni da '+o.minutes+' min</button>';
   }).join(' oppure ') + '.</p>';
 }
-function renderWeek(){ renderPass(); renderSession(); renderExtras(); renderCoverage(); renderPlanList(); renderCautionCard(); }
+function renderWeek(){ renderPass(); renderPath(); renderHoldHint(); renderSession(); renderExtras(); renderCoverage(); renderPlanList(); renderCautionCard(); }
+function renderHoldHint(){
+  var eh = effHold(), hh = $("#holdHint");
+  hh.hidden = eh === S.hold;
+  hh.textContent = eh === S.hold ? "" : "Nel blocco " + BLOCKS[PATH.block - 1].name + (PATH.cycle > 1 ? " del ciclo " + PATH.cycle : "") + " le tenute statiche salgono di livello: " + S.hold + " → " + eh + " s.";
+}
+function renderPath(){
+  var P = PATH, B = BLOCKS[P.block - 1], bars = "";
+  for (var i = 1; i <= 12; i++){
+    var bi = i <= 4 ? 0 : i <= 8 ? 1 : 2;
+    bars += '<i class="'+(i < P.cw ? "past" : i === P.cw ? "now" : "")+'" style="--bc:'+BLOCKS[bi].color+'"></i>';
+  }
+  var labels = BLOCKS.map(function(x, j){ return '<span class="'+(j === P.block - 1 ? "cur" : "")+'">'+x.name+'</span>'; }).join("");
+  var nd = new Date(MONDAY); nd.setDate(nd.getDate() + 7*(P.block*4 + 1 - P.cw));
+  var next = P.block < 3 ? BLOCKS[P.block].name : "riparte il ciclo, con tenute un livello più lunghe";
+  var desc = '<b>'+B.name+'.</b> '+B.desc+' Tenute da '+effHold()+' s. Da '+fmtDay(nd)+': '+next+'.';
+  var done = testThisWeek(), summ = testSummary(), test = "";
+  if (P.test && !done){
+    test = '<div class="path-test"><div><b>Test di mobilità</b><span>6 prove, 5 minuti: '+(P.cw === 1 && P.cycle === 1 ? "misura da dove parti" : "misura i progressi del blocco")+'.</span></div><button class="btn primary" data-act="open-test">Fai il test</button></div>';
+  } else if (done){
+    test = '<div class="path-test done"><div><b>Test fatto '+CHECK.replace('<svg', '<svg style="width:14px;height:14px;vertical-align:-2px;color:var(--sea)"')+'</b><span>'+esc(summ)+'</span></div><button class="linkbtn" data-act="open-test">Rivedi</button></div>';
+  } else if (TESTS.length){
+    test = '<p class="path-desc">'+esc(summ)+' Prossimo test all\'inizio del blocco. <button class="linkbtn" data-act="open-test">Risultati</button></p>';
+  }
+  $("#path").innerHTML = '<div class="path-top"><b>Settimana '+P.cw+' di 12</b><span>'+(P.cycle > 1 ? "Ciclo "+P.cycle : "Il tuo percorso")+'</span></div>'
+    + '<div class="path-bar" aria-hidden="true">'+bars+'</div><div class="path-blocks">'+labels+'</div>'
+    + '<p class="path-desc">'+desc+'</p>' + test;
+}
+
+/* ---------- Test di mobilità ---------- */
+function segYN(name, val, opts){
+  return '<div class="seg" role="radiogroup">' + opts.map(function(o, i){
+    var v = o[1], id = name + "_" + i;
+    return '<input type="radio" name="'+name+'" id="'+id+'" value="'+v+'"'+(val === v ? " checked" : "")+'><label for="'+id+'">'+o[0]+'</label>';
+  }).join("") + '</div>';
+}
+function testInputs(t, r){
+  var YN = [["Sì",1],["No",0]], k = TEST_KEYS[t.id];
+  var numIn = function(key, label, neg){ return '<label class="tnum" for="t_'+key+'">'+label+'<input type="number" id="t_'+key+'" step="0.5"'+(neg ? "" : ' min="0" inputmode="decimal"')+' value="'+(r[key] !== undefined ? r[key] : "")+'" placeholder="cm"></label>'; };
+  if (t.type === "cm2") return '<div class="tin">'+numIn("kwDx", "Destro, cm")+numIn("kwSx", "Sinistro, cm")+'</div>';
+  if (t.type === "cm") return '<div class="tin one">'+numIn("reach", "Centimetri", true)+'</div>';
+  if (t.type === "opt") return '<div class="tin one">'+segYN("t_squat", r.squat, t.opts.map(function(o, i){ return [o, i]; }))+'</div>';
+  if (t.type === "yn2") return '<div class="tin">'+k.map(function(key, j){ return '<div class="side"><span>'+t.sides[j]+'</span>'+segYN("t_"+key, r[key], YN)+'</div>'; }).join("")+'</div>';
+  return '<div class="tin one">'+segYN("t_"+k[0], r[k[0]], YN)+'</div>';
+}
+function openTest(){
+  UI.lastFocus = document.activeElement;
+  var cur = testThisWeek(), prev = testBefore(), r = cur ? cur.r : {};
+  var rows = TEST_LIST.map(function(t){
+    return '<div class="trow"><h4>'+esc(t.name)+'</h4><p>'+esc(t.how)+'</p>'+testInputs(t, r)
+      + '<p class="tref">'+esc(t.ref)+(prev ? ' <span class="tprev">Test precedente: '+esc(testValTxt(t, prev.r))+'.</span>' : '')+'</p></div>';
+  }).join("");
+  $("#sheetPanel").innerHTML = '<div class="sheet-fig" style="--ac:#0e8a8f">'+fig("caviglia", "Test di mobilità: ginocchio al muro")+'<button class="sheet-close" data-act="close-sheet" aria-label="Chiudi">'+CLOSE+'</button></div>'
+    + '<div class="sheet-body"><div><h2 id="sheetTitle">Test di mobilità</h2><div class="tags"><span class="tag">6 prove</span><span class="tag">5 minuti</span><span class="tag">Settimana '+PATH.cw+(PATH.cycle > 1 ? ", ciclo "+PATH.cycle : "")+'</span></div></div>'
+    + '<p class="hint">Fallo sempre nello stesso modo e nello stesso momento, per esempio prima della sessione: così i numeri sono confrontabili. Lascia vuoto quello che non riesci a misurare.</p>'
+    + '<div class="tests">'+rows+'</div>'
+    + '<button class="btn primary" data-act="test-save">Salva i risultati</button></div>';
+  $("#sheet").hidden = false;
+  document.body.classList.add("noscroll");
+  var c = $(".sheet-close"); if (c) c.focus();
+  $("#sheetPanel").scrollTop = 0;
+}
+function saveTest(){
+  var r = {};
+  ["kwDx","kwSx","reach"].forEach(function(key){
+    var el = document.getElementById("t_" + key); if (!el || el.value === "") return;
+    var v = parseFloat(String(el.value).replace(",", "."));
+    if (isFinite(v)) r[key] = Math.round(v*2)/2;
+  });
+  ["thomasDx","thomasSx","squat","braccia","rotDx","rotSx"].forEach(function(key){
+    var el = document.querySelector('input[name="t_'+key+'"]:checked'); if (el) r[key] = +el.value;
+  });
+  if (Object.keys(r).length){
+    var cur = testThisWeek(), entry = {date:isoDate(NOW), week:PATH.week, r:r};
+    if (cur) TESTS[TESTS.indexOf(cur)] = entry; else TESTS.push(entry);
+    TESTS.sort(function(a, b){ return a.date < b.date ? -1 : a.date > b.date ? 1 : 0; });
+    save();
+  }
+  closeSheet(); renderPath();
+}
 function renderCautionCard(){
   var el = $("#cautionCard");
   if (!S.shoulder && !S.groin){ el.hidden = true; el.innerHTML = ""; return; }
@@ -1721,17 +1987,24 @@ function releaseWake(){ try { if (WAKE) WAKE.release(); } catch(e){} WAKE = null
 
 /* ---------- Timer guidato ---------- */
 var CIRC = 2*Math.PI*52;
-var PL = {steps:[], i:0, cur:0, remain:0, endAt:0, running:false, timer:null, lastWhole:null, halfDone:false, meta:null, prefix:[], totalMs:0, nEx:0, finished:false};
+var PL = {steps:[], i:0, cur:0, remain:0, endAt:0, running:false, timer:null, lastWhole:null, halfDone:false, pnfPh:"in", meta:null, prefix:[], totalMs:0, nEx:0, finished:false};
+var PNF_START = 15, PNF_CYCLE = 15, PNF_PUSH = 5;
+function pnfPhase(el, dur){
+  if (el < PNF_START) return "in";
+  var k = Math.floor((el - PNF_START) / PNF_CYCLE);
+  if (PNF_START + PNF_CYCLE*k + PNF_PUSH + 5 > dur) return "end";
+  return (el - PNF_START - PNF_CYCLE*k < PNF_PUSH ? "c" : "r") + k;
+}
 function buildSteps(s){
   var steps = [];
   s.items.forEach(function(it, idx){
     var ex = EX[it.id];
     for (var k = 1; k <= it.sets; k++){
       var sides = ex.sides === 2 ? sideOrder(s.tight) : [null];
-      steps.push({type:"prep", ex:it.id, idx:idx, set:k, sets:it.sets, side:sides[0], dur:k === 1 ? PREP : GAP});
+      steps.push({type:"prep", ex:it.id, idx:idx, set:k, sets:it.sets, side:sides[0], pnf:!!it.pnf, dur:k === 1 ? PREP : GAP});
       sides.forEach(function(sd, j){
-        if (j > 0) steps.push({type:"switch", ex:it.id, idx:idx, set:k, sets:it.sets, side:sd, dur:SWITCH});
-        steps.push({type:"hold", ex:it.id, idx:idx, set:k, sets:it.sets, side:sd, dur:exDur(ex, s.hold, !!sd && sd === s.tight)});
+        if (j > 0) steps.push({type:"switch", ex:it.id, idx:idx, set:k, sets:it.sets, side:sd, pnf:!!it.pnf, dur:SWITCH});
+        steps.push({type:"hold", ex:it.id, idx:idx, set:k, sets:it.sets, side:sd, pnf:!!it.pnf, dur:exDur(ex, s.hold, !!sd && sd === s.tight)});
       });
     }
   });
@@ -1753,7 +2026,7 @@ function startSession(s, meta){
 }
 function goStep(i, initial){
   PL.i = i; var st = PL.steps[i];
-  PL.cur = st.dur*1000; PL.remain = PL.cur; PL.halfDone = false; PL.lastWhole = Math.ceil(PL.remain/1000);
+  PL.cur = st.dur*1000; PL.remain = PL.cur; PL.halfDone = false; PL.pnfPh = "in"; PL.lastWhole = Math.ceil(PL.remain/1000);
   if (PL.running) PL.endAt = performance.now() + PL.remain;
   renderStep(); renderTick(); cue(st);
 }
@@ -1767,7 +2040,7 @@ function loop(){
     while (i < PL.steps.length && over >= PL.steps[i].dur*1000){ over -= PL.steps[i].dur*1000; i++; }
     if (i >= PL.steps.length){ finish(); return; }
     PL.i = i; var st = PL.steps[i];
-    PL.cur = st.dur*1000; PL.remain = PL.cur - over; PL.endAt = now + PL.remain; PL.halfDone = false; PL.lastWhole = Math.ceil(PL.remain/1000);
+    PL.cur = st.dur*1000; PL.remain = PL.cur - over; PL.endAt = now + PL.remain; PL.halfDone = false; PL.pnfPh = "in"; PL.lastWhole = Math.ceil(PL.remain/1000);
     renderStep(); cue(st);
   }
   renderTick();
@@ -1797,9 +2070,12 @@ function renderStep(){
   $("#player").className = "player ph-" + (hold ? "hold" : "prep");
   $("#plRing").className = "pl-ring " + (hold ? "hold" : "prep");
   $("#plName").textContent = ex.name;
-  $("#plSide").textContent = sideLabel(ex, st.side) + (st.sets > 1 ? " · serie " + st.set + " di " + st.sets : "");
+  $("#plSide").textContent = sideLabel(ex, st.side) + (st.sets > 1 ? " · serie " + st.set + " di " + st.sets : "") + (st.pnf ? " · contrai-rilassa" : "");
   var w = activeWarn(ex);
-  $("#plCue").textContent = (st.type === "prep" && st.set === 1 && w) ? w : ex.cue;
+  $("#plCue").className = "pl-cue";
+  $("#plCue").textContent = (st.type === "prep" && st.set === 1 && w) ? w
+    : (st.type === "prep" && st.pnf) ? "Contrai-rilassa: al segnale spingi 5 secondi a metà forza, poi rilascia e vai un filo più a fondo."
+    : ex.cue;
   $("#plCount").textContent = "Esercizio " + (st.idx + 1) + " di " + PL.nEx;
   var nxt = null;
   for (var j = PL.i + 1; j < PL.steps.length; j++){ if (PL.steps[j].idx !== st.idx){ nxt = PL.steps[j]; break; } }
@@ -1817,7 +2093,16 @@ function renderTick(){
     PL.lastWhole = whole;
   }
   var ex = EX[st.ex];
-  if (st.type === "hold" && ex.half && !PL.halfDone && rem <= PL.cur/2){
+  if (st.type === "hold" && st.pnf){
+    var ph = pnfPhase((PL.cur - rem)/1000, PL.cur/1000);
+    if (ph !== PL.pnfPh){
+      PL.pnfPh = ph;
+      $("#plCue").className = "pl-cue" + (ph.charAt(0) === "c" ? " push" : "");
+      if (ph.charAt(0) === "c"){ $("#plCue").textContent = "Spingi: " + ex.pnfCue; tone(988, 140); tone(988, 140, 0.18); buzz([50, 50, 50]); Voice.say("Spingi"); }
+      else if (ph.charAt(0) === "r"){ $("#plCue").textContent = "Rilascia, espira e vai un filo più a fondo."; tone(784, 220); buzz(60); Voice.say("Rilascia e vai più a fondo"); }
+    }
+  }
+  if (st.type === "hold" && ex.half && !st.pnf && !PL.halfDone && rem <= PL.cur/2){
     PL.halfDone = true;
     $("#plCue").textContent = ex.half;
     tone(1046, 150); buzz(80); Voice.say(ex.half);
@@ -1907,6 +2192,11 @@ document.addEventListener("click", function(e){
       if (UI.sel.type === "day"){ setDone(UI.sel.day, !isDone(UI.sel.day)); renderPass(); renderSession(); }
       break;
     case "close-sheet": closeSheet(); break;
+    case "open-test": openTest(); break;
+    case "test-save": saveTest(); break;
+    case "path-prev": if (PATH.week > 1) shiftPath(1); break;
+    case "path-next": shiftPath(-1); break;
+    case "path-reset": START = isoDate(MONDAY); PATH = pathInfo(); save(); renderControls(); renderWeek(); break;
     case "show-cautions": setTab("guide"); break;
     case "set-plan": S.days = +t.dataset.days; S.minutes = +t.dataset.min; save(); renderControls(); renderWeek(); break;
     case "pl-close": closePlayer(); break;
