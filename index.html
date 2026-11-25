@@ -202,7 +202,7 @@ details.more[open] summary::before{transform:rotate(45deg)}
 
 /* Sessione */
 .session{margin-top:16px;background:var(--surface);border:1px solid var(--line);border-radius:20px;overflow:hidden;scroll-margin-top:72px;box-shadow:var(--shadow)}
-.session-art{position:relative;display:flex;justify-content:center;background:var(--surface-2);background:color-mix(in srgb,var(--tc) 14%,var(--surface))}
+.session-art{position:relative;display:flex;justify-content:center;padding-top:40px;background:var(--surface-2);background:color-mix(in srgb,var(--tc) 14%,var(--surface))}
 .session-art .fig{width:auto;height:200px;max-width:100%}
 .session-art figcaption{position:absolute;left:14px;top:12px;font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2);background:var(--surface);padding:4px 8px;border-radius:7px}
 .session-head{padding:16px 16px 14px;border-top:5px solid var(--tc)}
@@ -320,6 +320,7 @@ details.more[open] summary::before{transform:rotate(45deg)}
 .sheet-panel{background:var(--surface);width:100%;max-width:640px;max-height:92%;overflow:auto;border-radius:22px 22px 0 0;padding-bottom:22px;box-shadow:0 -8px 30px rgba(0,0,0,.25)}
 @media (min-width:720px){.sheet{align-items:center;padding:24px}.sheet-panel{border-radius:22px;max-height:100%}}
 .sheet-fig{position:relative;background:var(--surface-2);background:color-mix(in srgb,var(--ac,var(--surface-3)) 14%,var(--surface))}
+.sheet-fig{padding-top:46px}
 .sheet-fig .fig{max-width:460px;margin:0 auto}
 .sheet-close{position:absolute;top:10px;right:10px;width:42px;height:42px;border-radius:50%;background:var(--surface);display:grid;place-items:center;box-shadow:var(--shadow)}
 .sheet-close svg,.iconbtn svg{width:20px;height:20px}
@@ -1645,16 +1646,22 @@ var F3 = (function(){
   }
 
   /* ---------- Interpolazione tra pose ---------- */
+  /* Una chiave che manca in una delle due pose vale zero (busto dritto, nessuna torsione): così le pose si fondono senza scatti */
+  function zeroOf(v){ return Array.isArray(v) ? v.map(zeroOf) : typeof v === "number" ? 0 : v; }
   function lerpPose(a, b, t){
     var o = {}, k;
-    for (k in a) if (!LIMBS[k]) o[k] = k in b ? lerpVal(a[k], b[k], t) : a[k];
-    for (k in b) if (!LIMBS[k] && !(k in a)) o[k] = b[k];
+    for (k in a) if (!LIMBS[k]) o[k] = lerpVal(a[k], k in b ? b[k] : zeroOf(a[k]), t);
+    for (k in b) if (!LIMBS[k] && !(k in a)) o[k] = lerpVal(zeroOf(b[k]), b[k], t);
     for (k in LIMBS) o[k] = lerpLimb(a[k], b[k], t);
     return o;
   }
   function lerpVal(a, b, t){
     if (typeof a === "number" && typeof b === "number") return a + (b - a)*t;
-    if (Array.isArray(a) && Array.isArray(b)) return a.map(function(x, i){ return lerpVal(x, b[i], t); });
+    if (Array.isArray(a) && Array.isArray(b)){
+      var r = [], n = Math.max(a.length, b.length);
+      for (var i = 0; i < n; i++) r.push(lerpVal(i < a.length ? a[i] : 0, i < b.length ? b[i] : 0, t));
+      return r;
+    }
     if (a && b && typeof a === "object" && typeof b === "object"){
       var o = {}, k;
       for (k in a) o[k] = k in b ? lerpVal(a[k], b[k], t) : a[k];
@@ -1669,7 +1676,7 @@ var F3 = (function(){
     a = a || {}; b = b || {};
     var o = {}, k;
     ["pf","fr","hb","tw","b"].forEach(function(q){ if (a[q] != null || b[q] != null) o[q] = (a[q] || 0) + ((b[q] || 0) - (a[q] || 0))*t; });
-    if (a.fw || b.fw) o.fw = nrm(mix(a.fw || a._fd, b.fw || b._fd, t));
+    if (a.fw || b.fw){ o.fw = nrm(mix(a.fw || a._fd, b.fw || b._fd, t)); if (a.fu || b.fu) o.fu = nrm(mix(a.fu || a._du, b.fu || b._du, t)); }
     if (a.hd || b.hd) o.hd = nrm(mix(a.hd || a._hd, b.hd || b._hd, t));
     if (!a.t && !b.t){
       o.d = lerpVal(a.d || [0,-90], b.d || [0,-90], t);
@@ -1695,7 +1702,7 @@ var F3 = (function(){
         var l = {}, a = {}, q, gl = R["leg"+sd], ga = R["arm"+sd];
         for (q in (K["l"+sd] || {})) l[q] = K["l"+sd][q];
         for (q in (K["a"+sd] || {})) a[q] = K["a"+sd][q];
-        l._w = gl.e; l._p = gl.pu; l._fd = gl.fd; a._w = ga.e; a._p = ga.pu; a._hd = ga.hd;
+        l._w = gl.e; l._p = gl.pu; l._fd = gl.fd; l._du = R["dor"+sd]; a._w = ga.e; a._p = ga.pu; a._hd = ga.hd;
         o["l"+sd] = l; o["a"+sd] = a;
       });
       return o;
@@ -1736,7 +1743,10 @@ var F3 = (function(){
           pts.push(P2(cam, p));
         }
       });
-      var m = pts.length, e = pts[m-1], pr = pts[m-2], ux = e[0]-pr[0], uy = e[1]-pr[1], l = Math.sqrt(ux*ux + uy*uy) || 1;
+      var m = pts.length, tot = 0;
+      for (var q = 1; q < m; q++) tot += Math.sqrt(Math.pow(pts[q][0]-pts[q-1][0], 2) + Math.pow(pts[q][1]-pts[q-1][1], 2));
+      if (tot < 17) return; /* movimento troppo corto per una freccia: resterebbe solo una punta rossa */
+      var e = pts[m-1], pr = pts[m-2], ux = e[0]-pr[0], uy = e[1]-pr[1], l = Math.sqrt(ux*ux + uy*uy) || 1;
       ux /= l; uy /= l;
       var trim = 0, path = "M" + pts.map(pt).join("L");
       function head(e, ux, uy){ var bx = e[0] - ux*7, by = e[1] - uy*7; return '<path class="ah" d="M' + pt(e) + "L" + pt([bx - uy*4.5, by + ux*4.5]) + "L" + pt([bx + uy*4.5, by - ux*4.5]) + 'Z"/>'; }
@@ -1832,7 +1842,7 @@ var FOAM0 = {p:[0,0.13,0], o:[0,-70,0], n:[16,0,0],
   lL:{t:[0.44,0.072,-0.12], p:[0.2,1,0], fw:[1,0,0]}, lR:{t:[0.44,0.072,0.12], p:[0.2,1,0], fw:[1,0,0]},
   aL:{t:{j:"head", fr:"H", l:[-0.07,0.03,-0.1]}}, aR:{t:{j:"head", fr:"H", l:[-0.07,0.03,0.1]}}};
 var TORS0 = {p:[0,0.13,0], o:[0,-90,0], drop:1, n:[-6,0,0], lL:{d:[0,-40], b:120, pf:20}, lR:{d:[0,-40], b:120, pf:20}, aL:{d:[100,2], b:4}, aR:{d:[100,2], b:4}};
-var CHILD = {p:[-0.39,0.2,0], o:[0,98,0], s:[16,0,0], n:[14,0,0],
+var CHILD = {p:[-0.4,0.26,0], o:[0,96,0], s:[6,0,0], n:[20,0,0],
   lL:{t:[-0.43,0.05,-0.12], p:[1,-0.4,0], pf:85}, lR:{t:[-0.43,0.05,0.12], p:[1,-0.4,0], pf:85}};
 var CUSH = function(x, z){ return {t:"ell", c:[x,0.03,z], rad:[0.13,0.03,0.11]}; };
 var WALLX = function(x, h){ return [[x,0,-0.7],[x,0,0.7],[x,h || 1.9,0.7],[x,h || 1.9,-0.7]]; };
@@ -1916,18 +1926,21 @@ gattomucca:{cam:[-6,10], mat:[0.05,0,1.7,0.62],
 libro:{side:"L", cam:[-72,36], mat:[0,0,1.8,0.9], props:[{t:"ell", c:[0.42,0.2,0.43], rad:[0.07,0.08,0.06]}],
   k:[cp(LIBRO0), {st:[0,0,58], n:[10,0,40], aL:{d:[118,-5], b:5}}],
   seq:[[0,0.8],[0,1,2.2],[1,1.6],[1,0,1.8]], hl:[["chest","front"]], tr:[["handL",0,1]]},
-ago:{cam:[180,28], mat:[0.1,0,1.6,0.9],
-  k:[cp(Q4), {o:[0,115,0], s:[6,0,0], st:[0,0,58], n:[0,0,20], aR:{t:[0.45,0.04,-0.52], hd:[0,0,-1]}, aL:{t:[0.64,0.035,-0.04], hd:[1,0,0]}}],
+ago:{cam:[122,32], mat:[0.15,0,1.6,0.9],
+  k:[cp(Q4), {o:[0,112,0], s:[4,0,0], st:[0,0,62], n:[0,0,22], aR:{t:[0.42,0.04,-0.46], hd:[0,0,-1], p:[0,1,0]}, aL:{t:[0.95,0.035,-0.24], hd:[1,0,-0.1]}}],
   hl:[["chest","back"],["uarmR","post",0,0.6]], tr:[["handR",0,1]]},
 sfinge:{cam:[22,10], mat:[0.1,0,1.9,0.62],
   k:[cp(PRONE, {n:[-4,0,0], aL:{t:[0.68,0.035,-0.2], hd:[1,0,0], p:[0,0,-1]}, aR:{t:[0.68,0.035,0.2], hd:[1,0,0], p:[0,0,1]}}),
      {s:[-42,0,0], n:[-6,0,0], aL:{t:[0.72,0.035,-0.15], hd:[1,0,0], p:[-0.5,-1,0]}, aR:{t:[0.72,0.035,0.15], hd:[1,0,0], p:[-0.5,-1,0]}}],
   hl:[["abd","front"],["pelvis","front"]], tr:[["head",0,1]]},
-torsione:{side:"L", cam:[40,48], mat:[0,0,1.8,1.1],
+torsione:{side:"L", cam:[76,58], mat:[0,0,1.8,1.1],
   k:[cp(TORS0), {o:[0,-90,0,52], s:[0,0,-52], n:[-6,0,-38]}],
   hl:[["abd",[0,0,1]],["chest","front"]], tr:[["kneeR",0,1]]},
-foam:{cam:[30,20], mat:[0,0,1.7,0.62], props:[ROLLZ(-0.41,-0.32,0.32)],
-  k:[cp(FOAM0), {st:[-30,0,0], n:[-14,0,0]}],
+foam:{cam:[6,10], mat:[0,0,1.7,0.62], props:[ROLLZ(-0.41,-0.32,0.32)],
+  k:[cp(FOAM0, {o:[0,-68,0], n:[18,0,0],
+      aL:{t:{j:"head", fr:"H", l:[-0.1,0.01,-0.075]}, p:[1,0.5,-0.45], hd:[0,0,1]}, aR:{t:{j:"head", fr:"H", l:[-0.1,0.01,0.075]}, p:[1,0.5,0.45], hd:[0,0,-1]}}),
+     {o:[0,-58,0], s:[4,0,0], st:[-40,0,0], n:[4,0,0],
+      aL:{t:{j:"head", fr:"H", l:[-0.1,0.01,-0.075]}, p:[0.6,1,-0.45], hd:[0,0,1]}, aR:{t:{j:"head", fr:"H", l:[-0.1,0.01,0.075]}, p:[0.6,1,0.45], hd:[0,0,-1]}}],
   seq:[[0,0.6],[0,1,1.5],[1,0.8],[1,0,1.4]], hl:[["chest","back"]], tr:[["head",0,1]]},
 laterale:{cam:[88,6],
   k:[{p:[0,0.9,0.02], lL:{t:[0.02,0.072,-0.07], fw:[1,0,-0.1]}, lR:{t:[-0.07,0.072,-0.14], fw:[1,0,0.05]},
@@ -1943,19 +1956,21 @@ deadbug:{cam:[28,22], mat:[0.1,0,1.9,0.62],
      {lR:{d:[0,0], b:90, pf:5}, aL:{d:[0,2], b:4}, lL:{d:[0,-78], b:4, pf:5}, aR:{d:[0,82], b:6}}],
   seq:[[0,0.3],[0,1,1.3],[1,0.5],[1,0,1.1],[0,2,1.3],[2,0.5],[2,0,1.1]], hl:[["abd","front"]]},
 /* ---------- Spalle e collo ---------- */
-bambino:{cam:[-20,72], mat:[0.2,0,1.6,1.0],
-  k:[cp(CHILD, {aL:{t:[0.8,0.035,-0.16], hd:[1,0,0]}, aR:{t:[0.8,0.035,0.16], hd:[1,0,0]}}),
-     {s:[14,-16,0], aL:{t:[0.7,0.035,-0.5], hd:[0.6,0,-0.8]}, aR:{t:[0.75,0.035,-0.32], hd:[0.6,0,-0.8]}}],
+bambino:{cam:[-15,55], mat:[0.15,0,1.6,1.0],
+  k:[cp(CHILD, {aL:{t:[0.78,0.035,-0.16], hd:[1,0,0]}, aR:{t:[0.78,0.035,0.16], hd:[1,0,0]}}),
+     {s:[6,-24,0], n:[20,-8,0], aL:{t:[0.5,0.035,-0.66], hd:[0.55,0,-0.84]}, aR:{t:[0.6,0.035,-0.46], hd:[0.55,0,-0.84]}}],
   hl:[["abd",[0,0,1]],["chest",[0,0,1]]], tr:[["handR",0,1]]},
-pettorale:{cam:[120,16], focus:["head","shL","shR","elR","wrR","handR","elL","wrL","pelvis","kneeL","kneeR","toeL","toeR","heelL","heelR"], props:[{t:"box", c:[0.06,1.05,0.47], h:[0.045,1.05,0.06]}],
+pettorale:{cam:[150,14], focus:["head","shL","shR","elR","wrR","handR","elL","wrL","pelvis","kneeL","kneeR","toeL","toeR","heelL","heelR"], props:[{t:"box", c:[0.06,1.05,0.47], h:[0.045,1.05,0.06]}],
   k:[{p:[-0.05,0.93,0], lL:{t:[-0.05,0.072,-0.1], fw:[1,0,-0.1]}, lR:{t:[-0.02,0.072,0.1], fw:[1,0,0.1]},
       aR:{t:[0.03,1.62,0.41], p:[0,-1,0.4], hd:[0,1,0]}, aL:ARM0},
      {p:[0.12,0.9,0], s:[0,0,16], lR:{t:[0.42,0.072,0.1], fw:[1,0,0.1]}}],
-  hl:[["chest",[1,0.2,0.7]],["uarmR","ant",0,0.4]], tr:[["pelvis",0,1,0,[0,-0.3,0]]]},
-dorsale:{cam:[22,12], mat:[0,0,1.2,0.62],
-  props:[{t:"box", c:[0.84,0.43,0], h:[0.24,0.03,0.24]},{t:"box", c:[0.66,0.2,0], h:[0.03,0.2,0.2]},{t:"box", c:[1.02,0.2,0], h:[0.03,0.2,0.2]}],
-  k:[cp(KNEEL, {p:[-0.05,0.5,0], o:[0,96,0], aL:{d:[180,62], b:150}, aR:{d:[180,62], b:150}}),
-     {p:[-0.13,0.47,0], o:[0,104,0], s:[-18,0,0]}],
+  hl:[["chest",[1,0.2,0.7]],["uarmR","ant",0,0.4]]},
+dorsale:{cam:[-12,16], mat:[0,0,1.2,0.62],
+  props:[{t:"box", c:[0.82,0.43,0], h:[0.24,0.03,0.26]},{t:"box", c:[0.64,0.2,0], h:[0.03,0.2,0.22]},{t:"box", c:[1.0,0.2,0], h:[0.03,0.2,0.22]}],
+  k:[cp(KNEEL, {p:[0,0.6,0], o:[0,72,0], n:[14,0,0],
+      aL:{t:[0.63,0.762,-0.094], p:[0.6,-0.8,-0.05], hd:[-0.51,-0.04,0.86]}, aR:{t:[0.63,0.762,0.094], p:[0.6,-0.8,0.05], hd:[-0.51,-0.04,-0.86]}}),
+     {p:[-0.14,0.52,0], o:[0,108,0], s:[-12,0,0], n:[22,0,0],
+      aL:{t:[0.509,0.487,0.024], p:[0.98,0.18,-0.04], hd:[-0.45,0.24,0.86]}, aR:{t:[0.509,0.487,-0.024], p:[0.98,0.18,0.04], hd:[-0.45,0.24,-0.86]}}],
   hl:[["chest",[0,0,1]],["uarmR","post",0.2,1]], tr:[["chest",0,1,0,[0,0,0.3]]]},
 crossbody:{cam:[110,6], focus:["head","shL","shR","elR","wrR","handR","elL","wrL","handL","pelvis"],
   k:[cp(STAND, {aR:{d:[0,-2], b:4}}), {aR:{d:[-58,-4], b:4}, aL:{t:{j:"elR", o:[0.06,0,0.02]}}}],
@@ -2009,7 +2024,7 @@ rotazioni:{cam:[82,22],
 gambatesa:{cam:[22,15], mat:[0.15,0,1.9,0.62],
   k:[cp(SUP, {lR:{d:[0,-90], pf:-15}}), {lR:{d:[0,-22], b:2, pf:-18}}],
   seq:[[0,0.5],[0,1,1.4],[1,1.5],[1,0,1.6]], hl:[["thighR","post",0.2,0.95],["pelvis","front"]], tr:[["toeR",0,1]]},
-yw:{cam:[-44,52], mat:[0.15,0,1.9,0.9], props:[{t:"cyl", a:[0.83,0.045,-0.16], b:[0.83,0.045,0.16], r:0.045, col:"cush"}],
+yw:{cam:[-84,55], mat:[0.15,0,1.9,0.9], props:[{t:"cyl", a:[0.83,0.045,-0.16], b:[0.83,0.045,0.16], r:0.045, col:"cush"}],
   k:[cp(PRONE, {n:[12,0,0], aL:{d:[90,52], b:2}, aR:{d:[90,52], b:2}}),
      {aL:{d:[112,52], b:2}, aR:{d:[112,52], b:2}, sc:[0,-0.02]},
      {aL:{d:[112,-28], b:105}, aR:{d:[112,-28], b:105}, sc:[0,-0.03]},
@@ -2055,19 +2070,20 @@ rullo_dorsali:{cam:[-20,55], mat:[-0.1,0,1.9,0.8], props:[ROLLZ(-0.52,-0.25,0.25
       aR:{d:[0,85], b:6}, aL:{t:[-0.35,0.035,0.3], hd:[0,0,1]}},
      {p:[-0.12,0.2,0]}],
   seq:[[0,0.3],[0,1,1.8],[1,0.3],[1,0,1.8]], hl:[["chest",[-0.3,0,-1]]], tr:[["pelvis",0,1,1,[0,0.25,0]]]},
-petto_rullo:{cam:[40,30], mat:[-0.15,0,1.9,1.1], props:[{t:"cyl", a:[-0.82,0.075,0], b:[0.1,0.075,0], r:0.075}],
+petto_rullo:{cam:[18,58], mat:[-0.15,0,1.9,1.1], props:[{t:"cyl", a:[-0.82,0.075,0], b:[0.1,0.075,0], r:0.075}],
   k:[{p:[0,0.27,0], o:[0,-90,0], n:[-4,0,0], lL:{t:[0.42,0.072,-0.16], p:[0.2,1,-0.1], fw:[1,0,0]}, lR:{t:[0.42,0.072,0.16], p:[0.2,1,0.1], fw:[1,0,0]},
       aL:{t:[-0.25,0.035,-0.56], hd:[0.4,0,-1]}, aR:{t:[-0.25,0.035,0.56], hd:[0.4,0,1]}}],
   hl:[["chest","front"]]},
-palla:{cam:[28,8], walls:[WALLX(-0.27,1.95)], props:[{t:"ball", c:{j:"chest", fr:"T", l:[-0.15,0.06,0.07]}, r:0.033}],
-  k:[cp(STAND, {p:[-0.08,0.86,0], o:[0,-2,0], lL:{t:[0.2,0.072,-0.11], fw:[1,0,-0.1]}, lR:{t:[0.2,0.072,0.11], fw:[1,0,0.1]}, aR:{d:[-55,-8], b:20}}),
-     {p:[-0.08,0.78,0]}],
+palla:{cam:[6,8], walls:[WALLX(-0.27,1.95)], props:[{t:"ball", c:{j:"chest", fr:"T", l:[-0.15,0.06,0.07]}, r:0.035}],
+  k:[cp(STAND, {p:[-0.08,0.87,0], o:[0,-2,0], lL:{t:[0.2,0.072,-0.11], fw:[1,0,-0.1]}, lR:{t:[0.2,0.072,0.11], fw:[1,0,0.1]},
+      aR:{t:{j:"shL", fr:"T", l:[0.12,-0.02,0]}, p:[1,-0.35,0.25]}}),
+     {p:[-0.08,0.75,0]}],
   seq:[[0,0.3],[0,1,1.4],[1,0.3],[1,0,1.4]], hl:[["chest",[-1,0.3,0.6]]], tr:[["pelvis",0,1,1,[0.3,0,0]]]},
 /* ---------- Rinforzo e varianti protette ---------- */
 rotesterna:{cam:[78,18], props:[{t:"box", c:[0.18,0.95,-0.66], h:[0.04,0.95,0.04]}, {t:"band", pts:[[0.18,1.0,-0.62],{j:"gripR"}]}],
   k:[cp(STAND, {aR:{d:[4,-86], b:90, tw:-62}}), {aR:{d:[4,-86], b:90, tw:35}}],
   seq:[[0,0.3],[0,1,1.2],[1,0.6],[1,0,1.6]], hl:[["uarmR","post",0,0.45]], tr:[["handR",0,1]]},
-remata:{cam:[36,8], props:[{t:"box", c:[1.0,0.95,0], h:[0.04,0.95,0.04]}, {t:"band", pts:[{j:"gripL"},[0.97,1.15,0],{j:"gripR"}]}],
+remata:{cam:[-35,12], props:[{t:"box", c:[1.0,0.95,0], h:[0.04,0.95,0.04]}, {t:"band", pts:[{j:"gripL"},[0.97,1.15,0],{j:"gripR"}]}],
   k:[cp(STAND, {p:[0,0.92,0], aL:{t:[0.55,1.17,-0.18]}, aR:{t:[0.55,1.17,0.18]}}),
      {sc:[0,-0.035], aL:{t:[0.12,1.02,-0.24], p:[-1,-0.2,-0.4]}, aR:{t:[0.12,1.02,0.24], p:[-1,-0.2,0.4]}}],
   seq:[[0,0.3],[0,1,1.1],[1,0.9],[1,0,1.6]], hl:[["chest","back"]], tr:[["elR",0,1]]},
@@ -2096,10 +2112,10 @@ bambino_soft:{cam:[-8,12], mat:[0.1,0,1.5,0.62],
 libro_soft:{side:"L", cam:[-72,36], mat:[0,0,1.8,0.9], props:[{t:"ell", c:[0.42,0.2,0.43], rad:[0.07,0.08,0.06]}],
   k:[cp(LIBRO0, {aL:{t:{j:"chest", fr:"T", l:[0.12,0.03,-0.05]}}}), {st:[0,0,45], n:[10,0,30]}],
   seq:[[0,0.8],[0,1,2.0],[1,1.6],[1,0,1.8]], hl:[["chest","front"]], tr:[["elL",0,1]]},
-foam_soft:{cam:[30,20], mat:[0,0,1.7,0.62], props:[ROLLZ(-0.41,-0.32,0.32)],
-  k:[cp(FOAM0, {aL:{t:{j:"shR", fr:"T", l:[0.1,-0.06,-0.04]}}, aR:{t:{j:"shL", fr:"T", l:[0.12,-0.1,0.04]}}}), {st:[-30,0,0], n:[-14,0,0]}],
+foam_soft:{cam:[6,10], mat:[0,0,1.7,0.62], props:[ROLLZ(-0.41,-0.32,0.32)],
+  k:[cp(FOAM0, {o:[0,-68,0], n:[18,0,0], aL:{t:{j:"shR", fr:"T", l:[0.1,-0.06,-0.04]}}, aR:{t:{j:"shL", fr:"T", l:[0.12,-0.1,0.04]}}}), {o:[0,-58,0], s:[4,0,0], st:[-40,0,0], n:[4,0,0]}],
   seq:[[0,0.6],[0,1,1.5],[1,0.8],[1,0,1.4]], hl:[["chest","back"]], tr:[["head",0,1]]},
-torsione_soft:{side:"L", cam:[40,48], mat:[0,0,1.8,1.1],
+torsione_soft:{side:"L", cam:[76,58], mat:[0,0,1.8,1.1],
   k:[cp(TORS0, {aL:{d:[100,-42], b:4}, aR:{d:[100,-42], b:4}}), {o:[0,-90,0,52], s:[0,0,-52], n:[-6,0,-38]}],
   hl:[["abd",[0,0,1]]], tr:[["kneeR",0,1]]},
 wallslide_soft:{cam:[-42,8], walls:[WALLX(0.45,2.0)],
