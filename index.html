@@ -198,6 +198,13 @@ details.more[open] summary::before{transform:rotate(45deg)}
 .tin .side > span{font-size:12px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;color:var(--ink-2)}
 .tref{font-size:13px}
 .tprev{color:var(--ink);font-weight:600}
+.trow h4{display:flex;align-items:center;gap:9px}
+.tno{flex:none;width:26px;height:26px;border-radius:50%;display:grid;place-items:center;font-size:13px;font-weight:800;color:#fff;background:#0e8a8f}
+.tfig{border-radius:16px;overflow:hidden;background:var(--surface-2);background:color-mix(in srgb,#0e8a8f 14%,var(--surface))}
+.tfig .fig{max-width:440px;margin:0 auto}
+.sheet-fig.bare{height:0;padding:0;background:none;z-index:1}
+.sheet-fig.bare + .sheet-body{padding-top:20px}
+.sheet-fig.bare + .sheet-body h2{padding-right:52px}
 .pl-cue.push{color:#ff9a72;font-weight:700}
 
 /* Sessione */
@@ -388,7 +395,8 @@ details.more[open] summary::before{transform:rotate(45deg)}
 :root{--fx-mus:#ff2d3f;--fx-mat:rgba(16,40,52,.08);--fx-wall:rgba(16,40,52,.06);--fx-wall-line:rgba(16,40,52,.16);--fx-shadow:rgba(16,32,44,.17);--fx-halo:#fff}
 .f3{--fx-line:#22313c;--fx-skin:#f3c9a6;--fx-skin2:#d6a27f;--fx-top:#19a7a8;--fx-top2:#0f7d7f;--fx-sho:#35516d;--fx-sho2:#263c52;
   --fx-shoe:#f5f7f9;--fx-shoe2:#c6cfd7;--fx-hair:#3b2b23;--fx-prop:#c3d0da;--fx-propt:#e1e8ee;--fx-propd:#a9b8c4;
-  --fx-roll:#3f86c6;--fx-rollt:#7db1df;--fx-ball:#cfe13f;--fx-cush:#efb94a;--fx-stick:#a87445;--fx-band:#8e5cd6}
+  --fx-roll:#3f86c6;--fx-rollt:#7db1df;--fx-ball:#cfe13f;--fx-cush:#efb94a;--fx-stick:#a87445;--fx-band:#8e5cd6;
+  --fx-bed:#dfe7ee;--fx-bedt:#f6f8fa;--fx-bedd:#c4d0da}
 .f3defs stop{stop-color:var(--fx-mus)}
 .f3 .o{stroke:var(--fx-line);stroke-width:1.3;stroke-linejoin:round;vector-effect:non-scaling-stroke}
 .f3 .ol{stroke:var(--fx-line);stroke-width:2.6;stroke-linejoin:round;vector-effect:non-scaling-stroke}
@@ -402,6 +410,7 @@ details.more[open] summary::before{transform:rotate(45deg)}
 .f3 .c-prop{fill:var(--fx-prop)}.f3 .c-propt{fill:var(--fx-propt)}.f3 .c-propd{fill:var(--fx-propd)}
 .f3 .c-roll{fill:var(--fx-roll)}.f3 .c-rollt{fill:var(--fx-rollt)}
 .f3 .c-ball{fill:var(--fx-ball)}.f3 .c-cush,.f3 .c-cusht{fill:var(--fx-cush)}.f3 .c-stick{fill:var(--fx-stick)}
+.f3 .c-bed{fill:var(--fx-bed)}.f3 .c-bedt{fill:var(--fx-bedt)}.f3 .c-bedd{fill:var(--fx-bedd)}
 .f3 .hi{fill:#fff;opacity:.22}
 .f3 .mh{fill:url(#f3mg);opacity:var(--mh,1)}
 .f3.pulse .mh{animation:mpulse 1.8s ease-in-out infinite}
@@ -2138,6 +2147,35 @@ rotazioni_soft:{cam:[82,22],
   seq:[[0,0.15],[0,1,1.2],[1,0.15],[1,0,1.2]], tr:[["elR",0,1,1]]}
 };
 ART.legswing_soft = ART.legswing;
+/* ---------- Test di mobilità: in rosso la zona che il test mette alla prova ---------- */
+var TB = 0.56, TP = TB + 0.147;   /* letto: altezza del materasso; bacino sdraiato sul letto */
+ART.t_kw = {cam:[24,8], walls:[WALLX(0.56)],
+  k:[{p:[-0.05,0.86,0], o:[0,6,0], lR:{t:[0.27,0.072,0.1], fw:[1,0,0]}, lL:{t:[-0.33,0.075,-0.1], fw:[1,0,-0.05]},
+      aL:{t:[0.51,1.18,-0.2], hd:[0,1,0]}, aR:{t:[0.51,1.18,0.2], hd:[0,1,0]}},
+     {p:[0.15,0.75,0], o:[0,8,0]}],
+  seq:[[0,0.3],[0,1,1.1],[1,1.2],[1,0,1.1]], hl:[["shinR","post",0.45,1]], tr:[["kneeR",0,1]]};
+ART.t_reach = {cam:[20,8], mat:[0.3,0,1.7,0.62],
+  k:[{p:[0,0.13,0], o:[0,-6,0], drop:1, n:[-4,0,0],
+      lL:{t:[0.86,0.09,-0.08], p:[0,1,0], pf:-4}, lR:{t:[0.86,0.09,0.08], p:[0,1,0], pf:-4},
+      aL:{t:{j:"kneeL", o:[-0.22,0.09,0.01]}, hd:[1,-0.15,0]}, aR:{t:{j:"kneeR", o:[-0.22,0.09,-0.01]}, hd:[1,-0.15,0]}},
+     {o:[0,40,0], s:[26,0,0], n:[6,0,0],
+      aL:{t:{j:"toeL", o:[-0.15,0.03,0.06]}, hd:[1,-0.15,0]}, aR:{t:{j:"toeR", o:[-0.15,0.05,-0.06]}, hd:[1,-0.15,0]}}],
+  seq:[[0,0.6],[0,1,1.8],[1,1.8],[1,0,1.4]], hl:[["thighR","post",0.1,0.95]], tr:[["handR",0,1]]};
+ART.t_thomas = {cam:[22,12],
+  props:[{t:"box", c:[-0.29,0.2,0], h:[0.69,0.2,0.36], bg:1}, {t:"box", c:[-0.29,TB-0.08,0], h:[0.69,0.08,0.36], col:"bed", bg:1, bias:1},
+         {t:"ell", c:[-0.86,TB+0.035,0], rad:[0.13,0.035,0.2]}],
+  k:[cp(SUP, {p:[0,TP,0], drop:0, lL:{d:[0,-90], b:88, pf:25}, lR:{t:[0.47,TP-0.425,0.085], p:[1,1,0], pf:25}}),
+     {lL:{d:[0,50], b:135, pf:20}, aL:{t:{j:"kneeL", o:[0.07,0.07,-0.07]}, hd:[0.25,-1,0.3]}, aR:{t:{j:"kneeL", o:[0.07,0.07,0.09]}, hd:[0.25,-1,-0.3]}}],
+  seq:[[0,0.6],[0,1,1.4],[1,2.2],[1,0,1.3]], hl:[["thighR","ant",0,0.6],["pelvis",[1,0,0.7]]], tr:[["kneeL",0,1]]};
+ART.t_squat = cp(ART.squat, {hl:[["shinR","post",0.3,1],["shinL","post",0.3,1],["pelvis","back"]]});
+ART.t_braccia = {cam:[14,6], walls:[WALLX(-0.2,1.95)],
+  k:[cp(STAND, {p:[-0.07,0.93,0], o:[0,-3,0], lL:{t:[-0.02,0.072,-0.1], fw:[1,0,-0.08]}, lR:{t:[-0.02,0.072,0.1], fw:[1,0,0.08]},
+      aL:{d:[8,-84], b:6}, aR:{d:[8,-84], b:6}}),
+     {aL:{d:[0,98], b:2}, aR:{d:[0,98], b:2}}],
+  seq:[[0,0.5],[0,1,1.8],[1,1.6],[1,0,1.5]], hl:[["chest",[0,0,1]],["uarmR","post",0.2,1]], tr:[["handR",0,1]]};
+ART.t_rot = {side:"L", cam:[-72,36], mat:[0,0,1.8,0.9],
+  k:[cp(LIBRO0, {aL:{t:{j:"chest", fr:"T", l:[0.12,0.03,-0.05]}}}), {st:[0,0,85], n:[10,0,50]}],
+  seq:[[0,0.8],[0,1,2.0],[1,1.6],[1,0,1.8]], hl:[["chest","front"]], tr:[["elL",0,1]]};
 
 function figLegend(e){
   var a = artOf(e.id); if (!a || !a.hl || !a.hl.length) return "";
@@ -2650,20 +2688,43 @@ function testInputs(t, r){
   if (t.type === "yn2") return '<div class="tin">'+k.map(function(key, j){ return '<div class="side"><span>'+t.sides[j]+'</span>'+segYN("t_"+key, r[key], YN)+'</div>'; }).join("")+'</div>';
   return '<div class="tin one">'+segYN("t_"+k[0], r[k[0]], YN)+'</div>';
 }
+/* Disegni dei test (pose ART "t_" + id): fermi nella posizione da raggiungere, si muovono solo quelli in vista */
+var TEST_IO = null;
+function stopTestFigs(){
+  if (TEST_IO){ TEST_IO.disconnect(); TEST_IO = null; }
+  [].forEach.call(document.querySelectorAll("#sheetPanel [data-tfig]"), function(el){ FigAnim.stop(el); });
+}
+function mountTestFigs(){
+  var els = [].slice.call(document.querySelectorAll("#sheetPanel [data-tfig]"));
+  function put(el, moving){
+    if (el._mv === moving) return;
+    el._mv = moving;
+    var t = TEST_LIST[+el.getAttribute("data-tfig")];
+    FigAnim.mount(el, "t_" + t.id, {label:"Illustrazione: " + t.name, ar:1.6, mode:moving ? "loop" : "hold"});
+  }
+  els.forEach(function(el){ put(el, false); });
+  if (REDUCED_MOTION || !window.IntersectionObserver) return;
+  TEST_IO = new IntersectionObserver(function(list){
+    list.forEach(function(en){ put(en.target, en.isIntersecting); });
+  }, {root:$("#sheetPanel"), threshold:0.2});
+  els.forEach(function(el){ TEST_IO.observe(el); });
+}
 function openTest(){
   UI.lastFocus = document.activeElement;
+  stopTestFigs();
   var cur = testThisWeek(), prev = testBefore(), r = cur ? cur.r : {};
-  var rows = TEST_LIST.map(function(t){
-    return '<div class="trow"><h4>'+esc(t.name)+'</h4><p>'+esc(t.how)+'</p>'+testInputs(t, r)
+  var rows = TEST_LIST.map(function(t, i){
+    return '<div class="trow"><h4><span class="tno" aria-hidden="true">'+(i + 1)+'</span>'+esc(t.name)+'</h4>'
+      + '<div class="tfig"><div data-tfig="'+i+'"></div></div><p>'+esc(t.how)+'</p>'+testInputs(t, r)
       + '<p class="tref">'+esc(t.ref)+(prev ? ' <span class="tprev">Test precedente: '+esc(testValTxt(t, prev.r))+'.</span>' : '')+'</p></div>';
   }).join("");
-  $("#sheetPanel").innerHTML = '<div class="sheet-fig" style="--ac:#0e8a8f"><div id="sheetFig"></div><button class="sheet-close" data-act="close-sheet" aria-label="Chiudi">'+CLOSE+'</button></div>'
+  $("#sheetPanel").innerHTML = '<div class="sheet-fig bare"><button class="sheet-close" data-act="close-sheet" aria-label="Chiudi">'+CLOSE+'</button></div>'
     + '<div class="sheet-body"><div><h2 id="sheetTitle">Test di mobilità</h2><div class="tags"><span class="tag">6 prove</span><span class="tag">5 minuti</span><span class="tag">Settimana '+PATH.cw+(PATH.cycle > 1 ? ", ciclo "+PATH.cycle : "")+'</span></div></div>'
-    + '<p class="hint">Fallo sempre nello stesso modo e nello stesso momento, per esempio prima della sessione: così i numeri sono confrontabili. Lascia vuoto quello che non riesci a misurare.</p>'
+    + '<p class="hint">Fallo sempre nello stesso modo e nello stesso momento, per esempio prima della sessione: così i numeri sono confrontabili. Lascia vuoto quello che non riesci a misurare. Nei disegni, in rosso la zona che il test mette alla prova.</p>'
     + '<div class="tests">'+rows+'</div>'
     + '<button class="btn primary" data-act="test-save">Salva i risultati</button></div>';
   $("#sheet").hidden = false;
-  FigAnim.mount($("#sheetFig"), "caviglia", {label:"Test di mobilità: ginocchio al muro", ar:1.6});
+  mountTestFigs();
   document.body.classList.add("noscroll");
   var c = $(".sheet-close"); if (c) c.focus();
   $("#sheetPanel").scrollTop = 0;
@@ -2735,6 +2796,7 @@ function renderPlanList(){
 function openSheet(id){
   var e = EX[id]; if (!e) return;
   UI.lastFocus = document.activeElement;
+  stopTestFigs();
   var d = exDur(e, S.hold, false);
   $("#sheetPanel").innerHTML = '<div class="sheet-fig" style="--ac:'+AREA_COLOR[e.area]+'"><div id="sheetFig"></div>'+figLegend(e)+'<button class="sheet-close" data-act="close-sheet" aria-label="Chiudi">'+CLOSE+'</button></div>'
     + '<div class="sheet-body"><div><h2 id="sheetTitle">'+esc(e.name)+'</h2><div class="tags"><span class="kind '+e.kind+'">'+KIND_LABEL[e.kind]+'</span>'
@@ -2756,7 +2818,8 @@ function openSheet(id){
 }
 function closeSheet(){
   if ($("#sheet").hidden) return;
-  FigAnim.stop($("#sheetFig"));
+  var sf = $("#sheetFig"); if (sf) FigAnim.stop(sf);
+  stopTestFigs();
   $("#sheet").hidden = true;
   if ($("#player").hidden) document.body.classList.remove("noscroll");
   if (UI.lastFocus && UI.lastFocus.focus) try { UI.lastFocus.focus(); } catch(e){}
